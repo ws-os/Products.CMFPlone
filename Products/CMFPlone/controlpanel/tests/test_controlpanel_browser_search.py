@@ -1,35 +1,17 @@
 # -*- coding: utf-8 -*-
 from Products.CMFPlone.interfaces import ISearchSchema
-from Products.CMFPlone.testing import \
-    PRODUCTS_CMFPLONE_FUNCTIONAL_TESTING
+from Products.CMFPlone.controlpanel import tests
 
-from plone.app.testing import SITE_OWNER_NAME, SITE_OWNER_PASSWORD
 from plone.registry.interfaces import IRegistry
-from plone.testing.z2 import Browser
 
 from zope.component import getUtility
 from zope.component import getMultiAdapter
 
-import unittest2 as unittest
 
-
-class SearchControlPanelFunctionalTest(unittest.TestCase):
+class SearchControlPanelFunctionalTest(tests.ControlPanelFunctionalTest):
     """Test that changes in the search control panel are actually
     stored in the registry.
     """
-
-    layer = PRODUCTS_CMFPLONE_FUNCTIONAL_TESTING
-
-    def setUp(self):
-        self.app = self.layer['app']
-        self.portal = self.layer['portal']
-        self.portal_url = self.portal.absolute_url()
-        self.browser = Browser(self.app)
-        self.browser.handleErrors = False
-        self.browser.addHeader(
-            'Authorization',
-            'Basic %s:%s' % (SITE_OWNER_NAME, SITE_OWNER_PASSWORD,)
-        )
 
     def test_search_control_panel_link(self):
         self.browser.open(
