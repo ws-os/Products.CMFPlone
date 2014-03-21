@@ -19,4 +19,13 @@
     permission="plone.app.controlpanel.Site"
     />
 
+  <!-- Users and Groups Control Panel -->
+  <browser:page
+      name="users-controlpanel"
+      for="Products.CMFPlone.interfaces.IPloneSiteRoot"
+      class=".usersgroups.UsersControlPanelView"
+      permission="plone.app.controlpanel.UsersAndGroups"
+      template="users-controlpanel.pt"
+      />
+
 </configure>

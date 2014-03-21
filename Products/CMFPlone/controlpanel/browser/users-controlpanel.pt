@@ -1,0 +1,93 @@
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en"
+      xmlns:tal="http://xml.zope.org/namespaces/tal"
+      xmlns:metal="http://xml.zope.org/namespaces/metal"
+      xmlns:i18n="http://xml.zope.org/namespaces/i18n"
+    lang="en"
+    metal:use-macro="context/prefs_main_template/macros/master"
+    i18n:domain="plone">
+
+<body>
+
+<metal:main fill-slot="prefs_configlet_content"
+    tal:define="template_id string:@@users-controlpanel;
+                portal_url context/portal_url;">
+
+    <div class="documentEditable">
+        <div id="edit-bar">
+            <ul class="contentViews" id="content-views">
+              <li class="selected">
+                <a href=""
+                   tal:attributes="href string:$portal_url/@@usergroup-userprefs"
+                   i18n:translate="label_users">Users</a>
+              </li>
+              <li>
+                <a href=""
+                   tal:attributes="href string:$portal_url/@@usergroup-groupprefs"
+                   i18n:translate="label_groups">Groups</a>
+              </li>
+              <li>
+                <a href=""
+                   tal:attributes="href string:$portal_url/@@usergroup-controlpanel"
+                   i18n:translate="label_usergroup_settings">Settings</a>
+              </li>
+              <li>
+                <a href=""
+                   tal:attributes="href string:$portal_url/@@member-registration"
+                   i18n:translate="label_member_registration">Member Registration</a>
+              </li>
+            </ul>
+            <div class="contentActions">&nbsp;</div>
+        </div>
+
+        <div metal:use-macro="context/global_statusmessage/macros/portal_message">
+          Portal status message
+        </div>
+
+        <div id="content">
+
+            <a href=""
+               id="setup-link"
+               tal:attributes="href string:$portal_url/plone_control_panel"
+               i18n:translate="">
+                Site Setup
+            </a>
+
+            <h1 class="documentFirstHeading"
+                i18n:translate="heading_users_overview">Users Overview</h1>
+
+            <div id="content-core">
+                <p i18n:translate="description_user_management">
+                  Click the user's name to see and change the details of a
+                  specific user. You can also add and remove users.
+                </p>
+                <p i18n:translate="user_roles_note">
+                  Note that roles set here apply directly to a user.
+                  The symbol <img i18n:name="image_link_icon" tal:replace="structure context/site_icon.png" />
+                  indicates a role inherited from membership in a group.
+                </p>
+                <p i18n:translate="description_pas_users_listing"
+                   tal:condition="view/show_users_listing_warning">
+                  Note: Some or all of your PAS user source
+                  plugins do not allow listing of users, so you may not see
+                  the users defined by those plugins unless doing a specific
+                  search.
+                </p>
+
+                <a class="pat-modal" id="add-user"
+                   data-pat-modal="{&quot;actionOptions&quot;: {&quot;displayInModal&quot;: false}}"
+                   tal:attributes="href string:${portal_url}/@@new-user">
+                   <button i18n:translate="label_add_new_user">Add New User</button>
+                </a>
+
+                <div class="pat-structure"
+                     tal:attributes="data-pat-structure view/options">
+                </div>
+            </div>
+        </div>
+    </div>
+
+</metal:main>
+
+</body>
+</html>
+

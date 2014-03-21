@@ -18,7 +18,7 @@
  <configlet title="Users and Groups" action_id="UsersGroups"
     appId="UsersGroups" category="Plone" condition_expr=""
     icon_expr="string:$portal_url/group.png"
-    url_expr="string:${portal_url}/@@usergroup-userprefs" visible="True"
+    url_expr="string:${portal_url}/@@users-controlpanel" visible="True"
     i18n:attributes="title">
   <permission>Plone Site Setup: Users and Groups</permission>
  </configlet>
