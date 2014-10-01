@@ -100,8 +100,10 @@ $(document).ready(function(){
     });
 
     $('#content-core').delegate('#sharing-search-button', 'click', function(){
+        var base = this.baseURI;
         $.ajax({
-            url: $('base').attr('href') + '/@@updateSharingInfo',
+            url: base.substring(0, base.lastIndexOf('/')) +
+                '/@@updateSharingInfo',
             data: {
                 search_term: $('#sharing-user-group-search').val(),
                 'form.button.Search': 'Search'
@@ -118,9 +120,11 @@ $(document).ready(function(){
         var btn = $(this);
         var form = btn.parents('form');
         var data = form.serializeArray();
+        var base = this.baseURI;
         data.push({name: 'form.button.Save', value: 'Save'});
         $.ajax({
-            url: $('base').attr('href') + '/@@updateSharingInfo',
+            url: base.substring(0, base.lastIndexOf('/')) +
+                '/@@updateSharingInfo',
             data: data,
             type: 'POST',
             dataType: 'json',

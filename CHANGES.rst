@@ -5,6 +5,13 @@
 Changelog
 =========
 
+5.0a2-rpatterson1 (unreleased)
+------------------
+
+- Fix JS that depended on the now-removed <base> element.
+  [@rpatterson]
+
+
 5.0a2 (2014-04-20)
 ------------------
 
