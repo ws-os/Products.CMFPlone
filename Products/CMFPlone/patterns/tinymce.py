@@ -49,6 +49,7 @@ class TinyMceSettingsAdapter(object):
         else:
             initial = IUUID(folder, None)
         current_path = folder.absolute_url()[len(self.config['portal_url']):]
+
         configuration = {
             'relatedItems': format_pattern_settings(
                 self.settings.relatedItems,
@@ -62,11 +63,12 @@ class TinyMceSettingsAdapter(object):
                     self.config),
                 'uploadMultiple': False,
                 'maxFiles': 1,
-                'showTitle': False
+                'showTitle': False,
             },
             'base_url': self.config['document_base_url'],
             'tiny': {
                 'content_css': self.settings.content_css,
+                'style_formats': json.loads(self.settings.styles),
             },
             # This is for loading the languages on tinymce
             'loadingBaseUrl': '++plone++static/components/tinymce-builded/js/tinymce',
@@ -78,10 +80,12 @@ class TinyMceSettingsAdapter(object):
                 self.settings.prependToScalePart,
                 self.config),
             # XXX need to get this from somewhere...
-            'folderTypes': ','.join(['Folder']),
-            'imageTypes': ','.join(['Image']),
+            'folderTypes': self.settings.containsobjects.replace('\n', ','),
+            'imageTypes': self.settings.imageobjects.replace('\n', ','),
+            # since linkable had no default value, we have to check for NoneType
+            'linkableTypes': self.settings.linkable and \
+                self.settings.linkable.replace('\n', ',') or '',
             #'anchorSelector': utility.anchor_selector,
-            #'linkableTypes': utility.linkable.replace('\n', ',')
         }
 
         return {'data-pat-tinymce': json.dumps(configuration)}

@@ -176,29 +176,32 @@ class ITinyMCELayoutSchema(Interface):
 
     styles = schema.Text(
         title=_(u"Styles"),
-        description=_(u"Enter a list of styles to appear in the style pulldown. Format is title|tag or title|tag|className, one per line."),
-        default=u"Heading|h2|\n"
-                u"Subheading|h3|\n"
-                u"Literal|pre|\n"
-                u"Discreet|span|discreet\n"
-                u"Pull-quote|blockquote|pullquote\n"
-                u"Call-out|p|callout\n"
-                u"Highlight|span|visualHighlight\n"
-                u"Disc|ul|listTypeDisc\n"
-                u"Square|ul|listTypeSquare\n"
-                u"Circle|ul|listTypeCircle\n"
-                u"Numbers|ol|listTypeDecimal\n"
-                u"Lower Alpha|ol|listTypeLowerAlpha\n"
-                u"Upper Alpha|ol|listTypeUpperAlpha\n"
-                u"Lower Roman|ol|listTypeLowerRoman\n"
-                u"Upper Roman|ol|listTypeUpperRoman\n"
-                u"Definition term|dt|\n"
-                u"Definition description|dd|\n"
-                u"Odd row|tr|odd\n"
-                u"Even row|tr|even\n"
-                u"Heading cell|th|\n"
-                u"Page break (print only)|div|pageBreak\n"
-                u"Clear floats|div|visualClear",
+        description=_(u"Enter JSON-formatted style_formats configuration. "
+                      u"See http://www.tinymce.com/wiki.php/Configuration:style_formats"),
+        default=u"""[{"title": "Headers", "items": [
+                        {"title": "Header 1", "format": "h1"},
+                        {"title": "Header 2", "format": "h2"},
+                        {"title": "Header 3", "format": "h3"},
+                        {"title": "Header 4", "format": "h4"},
+                        {"title": "Header 5", "format": "h5"},
+                        {"title": "Header 6", "format": "h6"}
+                    ]},
+                    {"title": "Inline", "items": [
+                        {"title": "Bold", "icon": "bold", "format": "bold"},
+                        {"title": "Italic", "icon": "italic", "format": "italic"},
+                        {"title": "Underline", "icon": "underline", "format": "underline"},
+                        {"title": "Strikethrough", "icon": "strikethrough", "format": "strikethrough"},
+                        {"title": "Superscript", "icon": "superscript", "format": "superscript"},
+                        {"title": "Subscript", "icon": "subscript", "format": "subscript"},
+                        {"title": "Code", "icon": "code", "format": "code"}
+                    ]},
+                    {"title": "Blocks", "items": [
+                        {"title": "Paragraph", "format": "p"},
+                        {"title": "Blockquote", "format": "blockquote"},
+                        {"title": "Div", "format": "div"},
+                        {"title": "Pre", "format": "pre"}
+                    ]}]""",
+        constraint=validate_json,
         required=False)
 
     formats = schema.Text(
@@ -600,6 +603,7 @@ class ITinyMCEResourceTypesSchema(Interface):
     linkable = schema.Text(
         title=_(u"Linkable Objects"),
         description=_(u"Enter a list of content types which can be linked. Format is one contenttype per line."),
+        default=u"",
         required=False)
 
     imageobjects = schema.Text(

@@ -23,6 +23,7 @@ from zope.component import queryUtility
 from zope.deprecation import deprecated
 from zope.i18n import translate
 from zope.publisher.interfaces.browser import IBrowserRequest
+from zope import schema
 
 import OFS
 from AccessControl import getSecurityManager, Unauthorized
@@ -37,6 +38,7 @@ from Products.CMFCore.interfaces import IPropertiesTool
 from Products.CMFCore.permissions import ManageUsers
 from Products.CMFCore.utils import ToolInit as CMFCoreToolInit
 from Products.CMFCore.utils import getToolByName
+from Products.CMFPlone import PloneMessageFactory as _
 
 import transaction
 
