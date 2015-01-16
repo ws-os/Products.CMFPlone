@@ -176,7 +176,7 @@ class ITinyMCELayoutSchema(Interface):
                       u"This option enables you to add more advanced style formats"
                       u"for text and other elements to the editor."
                       u"The value of this option will be rendered as styles in the Formats dropdown."
-                      u"See http://www.tinymce.com/wiki.php/Configuration:style_formats"),
+                      u"See http://www.tinymce.com/wiki.php/Configuration:style_formats"
                       ),
         default=u"""[
 {"title": "Headers",
