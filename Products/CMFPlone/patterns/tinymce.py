@@ -60,6 +60,11 @@ class TinyMceSettingsAdapter(object):
         else:
             content_css = self.settings.content_css
 
+        tinyConfiguration = {
+            'content_css': content_css,
+            'style_formats': json.loads(self.settings.styles) if self.settings.styles else [],
+        }
+
         configuration = {
             'relatedItems': format_pattern_settings(
                 self.settings.relatedItems,
@@ -76,9 +81,7 @@ class TinyMceSettingsAdapter(object):
                 'showTitle': False
             },
             'base_url': self.config['document_base_url'],
-            'tiny': {
-                'content_css': content_css,
-            },
+            'tiny': tinyConfiguration,
             # This is for loading the languages on tinymce
             'loadingBaseUrl': '++plone++static/components/tinymce-builded/js/tinymce',
             'prependToUrl': 'resolveuid/',
