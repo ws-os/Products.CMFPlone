@@ -128,10 +128,12 @@ class ITinyMCEPatternSchema(Interface):
         description=u'/@@images/image/',
         default=u'/@@images/image/')
 
-    content_css = schema.Text(
-        title=_(u"Content CSS URL"),
-        description=u'++plone++static/components/tinymce/skins/lightgray/content.min.css')
-
+    content_css = schema.TextLine(
+        title=_(u"Choose the CSS used in WYSIWYG Editor Area"),
+        description=_(u"This option enables you to specify a custom CSS file that replaces the theme content CSS. This CSS file is the one used within the editor (the editable area)."
+                      u'++plone++static/components/tinymce/skins/lightgray/content.min.css'),
+        default=u'',
+        required=False)
 
 class ITinyMCELayoutSchema(Interface):
     """This interface defines the layout properties."""
@@ -166,12 +168,6 @@ class ITinyMCELayoutSchema(Interface):
         title=_(u"Enable contextmenu"),
         description=_(u"This option gives you the ability to enable/disable the use of the contextmenu."),
         default=True,
-        required=False)
-
-    content_css = schema.TextLine(
-        title=_(u"Choose the CSS used in WYSIWYG Editor Area"),
-        description=_(u"This option enables you to specify a custom CSS file that replaces the theme content CSS. This CSS file is the one used within the editor (the editable area)."),
-        default=u'',
         required=False)
 
     styles = schema.Text(
