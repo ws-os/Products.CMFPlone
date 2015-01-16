@@ -10,6 +10,9 @@ import pkg_resources
 from plone.i18n.normalizer.interfaces import IIDNormalizer
 from webdav.interfaces import IWriteLock
 
+from zope import schema
+from zope.i18nmessageid import MessageFactory
+
 import zope.interface
 from zope.interface import implementedBy
 from zope.component import getMultiAdapter
@@ -34,6 +37,8 @@ from Products.CMFCore.utils import ToolInit as CMFCoreToolInit
 from Products.CMFCore.utils import getToolByName
 
 import transaction
+
+_ = MessageFactory('plone.tinymce')
 
 security = ModuleSecurityInfo()
 security.declarePrivate('deprecated')
