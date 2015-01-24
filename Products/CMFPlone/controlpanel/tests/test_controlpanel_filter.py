@@ -45,8 +45,8 @@ class FilterRegistryIntegrationTest(unittest.TestCase):
     def test_default_nasty_tags(self):
         nasty_tags = self.safe_html.get_parameter_value('nasty_tags')
         self.assertEqual(
-            nasty_tags.keys().sort(),
-            ['meta', 'script', 'style', 'object', 'embed', 'applet'].sort())
+            sorted(nasty_tags.keys()),
+            ['applet', 'embed', 'meta', 'object', 'script', 'style', ])
 
     def test_nasty_tags_setting(self):
         self.assertTrue(hasattr(self.settings, 'nasty_tags'))
