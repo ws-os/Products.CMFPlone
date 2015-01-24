@@ -52,6 +52,17 @@ class FilterControlPanelFunctionalTest(unittest.TestCase):
         view = view.__of__(self.portal)
         self.assertTrue(view())
 
+    def test_disable_filtering_is_stored_in_registry(self):
+        self.browser.open(
+            "%s/@@filter-controlpanel" % self.portal_url)
+        self.browser.getControl(
+            name='form.widgets.disable_filtering:list').value = "selected"
+        self.browser.getControl('Save').click()
+
+        registry = getUtility(IRegistry)
+        settings = registry.forInterface(IFilterSchema, prefix="plone")
+        self.assertEqual(settings.disable_filtering, True)
+
     def test_nasty_tags_is_stored_in_registry(self):
         self.browser.open(
             "%s/@@filter-controlpanel" % self.portal_url)
