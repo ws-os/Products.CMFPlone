@@ -80,7 +80,7 @@ class FilterControlPanelFunctionalTest(unittest.TestCase):
         # test registry storage
         registry = getUtility(IRegistry)
         settings = registry.forInterface(IFilterSchema, prefix="plone")
-        self.assertEqual(settings.nasty_tags, ['div', 'a'])
+        self.assertEqual(sorted(settings.nasty_tags), ['a', 'div'])
         # test plone tool storage
         self.assertIn('a', self.safe_html._config['nasty_tags'].keys())
         self.assertIn('div', self.safe_html._config['nasty_tags'].keys())

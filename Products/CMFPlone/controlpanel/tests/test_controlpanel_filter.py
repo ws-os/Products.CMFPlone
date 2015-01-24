@@ -21,6 +21,10 @@ class FilterRegistryIntegrationTest(unittest.TestCase):
         registry = getUtility(IRegistry)
         self.settings = registry.forInterface(
             IFilterSchema, prefix="plone")
+        self.safe_html = getattr(
+            getToolByName(self.portal, 'portal_transforms'),
+            'safe_html',
+            None)
 
     def test_filter_controlpanel_view(self):
         view = getMultiAdapter((self.portal, self.portal.REQUEST),
@@ -37,6 +41,12 @@ class FilterRegistryIntegrationTest(unittest.TestCase):
 
     def test_disable_filtering_setting(self):
         self.assertTrue(hasattr(self.settings, 'disable_filtering'))
+
+    def test_default_nasty_tags(self):
+        nasty_tags = self.safe_html.get_parameter_value('nasty_tags')
+        self.assertEqual(
+            nasty_tags.keys().sort(),
+            ['meta', 'script', 'style', 'object', 'embed', 'applet'].sort())
 
     def test_nasty_tags_setting(self):
         self.assertTrue(hasattr(self.settings, 'nasty_tags'))
