@@ -70,17 +70,20 @@ class FilterControlPanelFunctionalTest(unittest.TestCase):
         # test plone tool storage
         self.assertTrue(bool(self.safe_html._config['disable_transform']))
 
-    def test_nasty_tags_is_stored_in_registry(self):
+    def test_nasty_tags_is_stored(self):
         self.browser.open(
             "%s/@@filter-controlpanel" % self.portal_url)
         self.browser.getControl(
             name='form.widgets.nasty_tags'
-        ).value = 'nastytagone\r\nnastytagtwo'
+        ).value = 'div\r\na'
         self.browser.getControl('Save').click()
-
+        # test registry storage
         registry = getUtility(IRegistry)
         settings = registry.forInterface(IFilterSchema, prefix="plone")
-        self.assertEqual(settings.nasty_tags, ['nastytagone', 'nastytagtwo'])
+        self.assertEqual(settings.nasty_tags, ['div', 'a'])
+        # test plone tool storage
+        self.assertIn('a', self.safe_html._config['nasty_tags'].keys())
+        self.assertIn('div', self.safe_html._config['nasty_tags'].keys())
 
     def test_stripped_tags_is_stored_in_registry(self):
         self.browser.open(
