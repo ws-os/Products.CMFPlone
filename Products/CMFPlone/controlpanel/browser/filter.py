@@ -1,4 +1,5 @@
 # -*- coding: utf-8 -*-
+from Products.CMFCore.utils import getToolByName
 from Products.CMFPlone import PloneMessageFactory as _  # NOQA
 from Products.CMFPlone.interfaces import IFilterSchema
 from Products.statusmessages.interfaces import IStatusMessage
@@ -21,10 +22,19 @@ class FilterControlPanelForm(RegistryEditForm):
 
     @button.buttonAndHandler(_(u"Save"), name='save')
     def handleSave(self, action):  # NOQA
-        # Save in portal tools
-        pass
-        # Proceed to registry storage
         data, errors = self.extractData()
+        # Save in portal tools
+        safe_html = getattr(
+            getToolByName(self.context, 'portal_transforms'),
+            'safe_html',
+            None)
+        disable_filtering = int(data['disable_filtering'])
+        if disable_filtering != safe_html._config['disable_transform']:
+            safe_html._config['disable_transform'] = disable_filtering
+            safe_html._p_changed = True
+            safe_html.reload()
+
+        # Proceed to registry storage
         if errors:
             self.status = self.formErrorsMessage
             return
