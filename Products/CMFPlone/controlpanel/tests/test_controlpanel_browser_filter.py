@@ -16,7 +16,7 @@ class FilterControlPanelFunctionalTest(unittest.TestCase):
 
     layer = PRODUCTS_CMFPLONE_FUNCTIONAL_TESTING
 
-    def setUp(self):
+    def setUp(self):  # NOQA
         self.app = self.layer['app']
         self.portal = self.layer['portal']
         self.request = self.layer['request']
@@ -58,7 +58,7 @@ class FilterControlPanelFunctionalTest(unittest.TestCase):
         self.browser.getControl(
             name='form.widgets.nasty_tags'
         ).value = 'nastytagone\r\nnastytagtwo'
-        self.browser.getControl('Apply').click()
+        self.browser.getControl('Save').click()
 
         registry = getUtility(IRegistry)
         settings = registry.forInterface(IFilterSchema, prefix="plone")
@@ -70,7 +70,7 @@ class FilterControlPanelFunctionalTest(unittest.TestCase):
         self.browser.getControl(
             name='form.widgets.stripped_tags'
         ).value = 'foo\r\nbar'
-        self.browser.getControl('Apply').click()
+        self.browser.getControl('Save').click()
 
         registry = getUtility(IRegistry)
         settings = registry.forInterface(IFilterSchema, prefix="plone")
@@ -82,7 +82,7 @@ class FilterControlPanelFunctionalTest(unittest.TestCase):
         self.browser.getControl(
             name='form.widgets.custom_tags'
         ).value = 'foo\r\nbar'
-        self.browser.getControl('Apply').click()
+        self.browser.getControl('Save').click()
 
         registry = getUtility(IRegistry)
         settings = registry.forInterface(IFilterSchema, prefix="plone")
@@ -94,7 +94,7 @@ class FilterControlPanelFunctionalTest(unittest.TestCase):
         self.browser.getControl(
             name='form.widgets.stripped_attributes'
         ).value = 'foo\r\nbar'
-        self.browser.getControl('Apply').click()
+        self.browser.getControl('Save').click()
 
         registry = getUtility(IRegistry)
         settings = registry.forInterface(IFilterSchema, prefix="plone")
@@ -106,7 +106,7 @@ class FilterControlPanelFunctionalTest(unittest.TestCase):
         self.browser.getControl(
             name='form.widgets.style_whitelist'
         ).value = 'foo\r\nbar'
-        self.browser.getControl('Apply').click()
+        self.browser.getControl('Save').click()
 
         registry = getUtility(IRegistry)
         settings = registry.forInterface(IFilterSchema, prefix="plone")
@@ -118,7 +118,7 @@ class FilterControlPanelFunctionalTest(unittest.TestCase):
         self.browser.getControl(
             name='form.widgets.class_blacklist'
         ).value = 'foo\r\nbar'
-        self.browser.getControl('Apply').click()
+        self.browser.getControl('Save').click()
 
         registry = getUtility(IRegistry)
         settings = registry.forInterface(IFilterSchema, prefix="plone")
