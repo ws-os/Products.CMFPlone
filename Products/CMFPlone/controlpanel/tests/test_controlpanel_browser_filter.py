@@ -1,4 +1,5 @@
 # -*- coding: utf-8 -*-
+from Products.CMFCore.utils import getToolByName
 from Products.CMFPlone.interfaces import IFilterSchema
 from Products.CMFPlone.testing import PRODUCTS_CMFPLONE_FUNCTIONAL_TESTING
 from plone.app.testing import SITE_OWNER_NAME, SITE_OWNER_PASSWORD
@@ -27,6 +28,10 @@ class FilterControlPanelFunctionalTest(unittest.TestCase):
             'Authorization',
             'Basic %s:%s' % (SITE_OWNER_NAME, SITE_OWNER_PASSWORD,)
         )
+        self.safe_html = getattr(
+            getToolByName(self.portal, 'portal_transforms'),
+            'safe_html',
+            None)
 
     def test_filter_control_panel_link(self):
         self.browser.open(
@@ -52,16 +57,18 @@ class FilterControlPanelFunctionalTest(unittest.TestCase):
         view = view.__of__(self.portal)
         self.assertTrue(view())
 
-    def test_disable_filtering_is_stored_in_registry(self):
+    def test_disable_filtering_is_stored(self):
         self.browser.open(
             "%s/@@filter-controlpanel" % self.portal_url)
         self.browser.getControl(
             name='form.widgets.disable_filtering:list').value = "selected"
         self.browser.getControl('Save').click()
-
+        # test registry storage
         registry = getUtility(IRegistry)
         settings = registry.forInterface(IFilterSchema, prefix="plone")
         self.assertEqual(settings.disable_filtering, True)
+        # test plone tool storage
+        self.assertTrue(bool(self.safe_html._config['disable_transform']))
 
     def test_nasty_tags_is_stored_in_registry(self):
         self.browser.open(
