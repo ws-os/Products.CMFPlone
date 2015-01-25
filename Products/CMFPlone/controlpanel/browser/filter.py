@@ -52,11 +52,6 @@ class FilterControlPanelForm(RegistryEditForm):
             getToolByName(self.context, 'portal_transforms'),
             'safe_html',
             None)
-        disable_filtering = int(data['disable_filtering'])
-        if disable_filtering != safe_html._config['disable_transform']:
-            safe_html._config['disable_transform'] = disable_filtering
-            safe_html._p_changed = True
-            safe_html.reload()
         nasty_tags = data['nasty_tags']
         if sorted(nasty_tags) != \
                 sorted(safe_html._config['nasty_tags'].keys()):

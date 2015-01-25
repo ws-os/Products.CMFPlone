@@ -2,6 +2,7 @@
 from Products.CMFCore.utils import getToolByName
 from Products.CMFPlone.interfaces import IFilterSchema
 from Products.CMFPlone.testing import PRODUCTS_CMFPLONE_FUNCTIONAL_TESTING
+from Products.PortalTransforms.data import datastream
 from plone.app.testing import SITE_OWNER_NAME, SITE_OWNER_PASSWORD
 from plone.registry.interfaces import IRegistry
 from plone.testing.z2 import Browser
@@ -57,33 +58,47 @@ class FilterControlPanelFunctionalTest(unittest.TestCase):
         view = view.__of__(self.portal)
         self.assertTrue(view())
 
-    def test_disable_filtering_is_stored(self):
+    def test_disable_filtering(self):
         self.browser.open(
             "%s/@@filter-controlpanel" % self.portal_url)
         self.browser.getControl(
             name='form.widgets.disable_filtering:list').value = "selected"
         self.browser.getControl('Save').click()
+
         # test registry storage
         registry = getUtility(IRegistry)
         settings = registry.forInterface(IFilterSchema, prefix="plone")
         self.assertEqual(settings.disable_filtering, True)
-        # test plone tool storage
-        self.assertTrue(bool(self.safe_html._config['disable_transform']))
 
-    def test_nasty_tags_is_stored(self):
+        # test that the transform is disabled, making anything pass
+        nasty_html = '<script></script>'
+        ds = datastream('dummy_name')
+        self.assertEqual(
+            nasty_html,
+            str(self.safe_html.convert(nasty_html, ds))
+        )
+
+    def test_nasty_tags(self):
         self.browser.open(
             "%s/@@filter-controlpanel" % self.portal_url)
         self.browser.getControl(
             name='form.widgets.nasty_tags'
         ).value = 'div\r\na'
         self.browser.getControl('Save').click()
+
         # test registry storage
         registry = getUtility(IRegistry)
         settings = registry.forInterface(IFilterSchema, prefix="plone")
         self.assertEqual(sorted(settings.nasty_tags), ['a', 'div'])
-        # test plone tool storage
-        self.assertIn('a', self.safe_html._config['nasty_tags'].keys())
-        self.assertIn('div', self.safe_html._config['nasty_tags'].keys())
+
+        # test that <a> is filtered
+        self.assertFalse(settings.disable_filtering)
+        good_html = '<a href="http://example.com">harmless link</a>'
+        ds = datastream('dummy_name')
+        self.assertEqual(
+            str(self.safe_html.convert(good_html, ds)),
+            ''
+        )
 
     def test_stripped_tags_is_stored_in_registry(self):
         self.browser.open(
