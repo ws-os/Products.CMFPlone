@@ -104,28 +104,34 @@ class FilterControlPanelFunctionalTest(unittest.TestCase):
         registry = getUtility(IRegistry)
         settings = registry.forInterface(IFilterSchema, prefix="plone")
 
-        # before we start, check that <p> is a valid tag
-        self.assertNotIn('p', settings.nasty_tags)
-        self.assertIn('p', self.safe_html._config['valid_tags'].keys())
+        # our test string and expected output
+        doubtful_html = '<strong>some text</strong>'
+        stripped_html = 'some text'
+
+        # initially <strong> is not stripped
+        ds = datastream('dummy_name')
+        self.assertEqual(
+            str(self.safe_html.convert(doubtful_html, ds)),
+            doubtful_html
+        )
 
         # set the value
         self.browser.open(
             "%s/@@filter-controlpanel" % self.portal_url)
         self.browser.getControl(
             name='form.widgets.stripped_tags'
-        ).value = 'p\r\nbar'
+        ).value = 'strong\r\nbar'
         self.browser.getControl('Save').click()
 
         # test registry storage
-        self.assertEqual(settings.stripped_tags, ['p', 'bar'])
+        self.assertEqual(settings.stripped_tags, ['strong', 'bar'])
 
-        # test that <foo> is stripped
+        # test that <strong> is stripped
         self.assertFalse(settings.disable_filtering)
-        doubtful_html = '<p style="display:none">harmless link</p>'
         ds = datastream('dummy_name')
         self.assertEqual(
             str(self.safe_html.convert(doubtful_html, ds)),
-            '<p>'
+            stripped_html
         )
 
     def test_custom_tags_is_stored_in_registry(self):
