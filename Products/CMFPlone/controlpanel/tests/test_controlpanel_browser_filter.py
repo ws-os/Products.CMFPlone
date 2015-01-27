@@ -158,17 +158,40 @@ class FilterControlPanelFunctionalTest(unittest.TestCase):
         settings = registry.forInterface(IFilterSchema, prefix="plone")
         self.assertEqual(settings.stripped_attributes, ['foo', 'bar'])
 
-    def test_style_whitelist_is_stored_in_registry(self):
+    def test_style_whitelist(self):
+        registry = getUtility(IRegistry)
+        settings = registry.forInterface(IFilterSchema, prefix="plone")
+
+        # our test string and expected output
+        doubtful_html = '<p style="align:right">some text</p>'
+        stripped_html = '<p>some text</p>'
+
+        # initially float attr is not stripped
+        ds = datastream('dummy_name')
+        self.assertEqual(
+            str(self.safe_html.convert(doubtful_html, ds)),
+            stripped_html
+        )
+
         self.browser.open(
             "%s/@@filter-controlpanel" % self.portal_url)
         self.browser.getControl(
             name='form.widgets.style_whitelist'
-        ).value = 'foo\r\nbar'
+        ).value = 'text-align\r\nstyle'
         self.browser.getControl('Save').click()
 
-        registry = getUtility(IRegistry)
-        settings = registry.forInterface(IFilterSchema, prefix="plone")
-        self.assertEqual(settings.style_whitelist, ['foo', 'bar'])
+        # test registry storage
+        self.assertEqual(
+            settings.style_whitelist,
+            ['text-align', 'style']
+        )
+
+        # test that float attr is now stripped
+        ds = datastream('dummy_name')
+        self.assertEqual(
+            str(self.safe_html.convert(doubtful_html, ds)),
+            doubtful_html
+        )
 
     def test_class_blacklist_is_stored_in_registry(self):
         self.browser.open(
