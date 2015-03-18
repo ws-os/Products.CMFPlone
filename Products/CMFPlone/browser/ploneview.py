@@ -1,10 +1,4 @@
-from plone.app.content.browser.folderfactories import _allowedTypes
-from plone.memoize.view import memoize
-from zope.interface import implements
-from zope.component import getMultiAdapter
-from zope.i18n import translate
-from zope.size import byteDisplay
-
+# -*- coding: utf-8 -*-
 from Acquisition import aq_inner
 from Products.CMFCore.permissions import AddPortalContent
 from Products.CMFCore.permissions import DeleteObjects
@@ -13,20 +7,30 @@ from Products.CMFCore.permissions import ModifyPortalContent
 from Products.CMFCore.permissions import ReviewPortalContent
 from Products.CMFCore.utils import _checkPermission
 from Products.CMFCore.utils import getToolByName
-from Products.Five import BrowserView
-
 from Products.CMFPlone import utils
 from Products.CMFPlone.browser.interfaces import IPlone
 from Products.CMFPlone.log import log_deprecated
-
-from plone.app.layout.globals.interfaces import IPatternsSettingsRenderer
+from Products.Five import BrowserView
+from plone.memoize.request import memoize_diy_request
+from plone.memoize.view import memoize
+from zope.component import getMultiAdapter
+from zope.i18n import translate
+from zope.interface import implementer
+from zope.size import byteDisplay
 
 
 _marker = []
 
 
+@memoize_diy_request(arg=0)
+def allowedTypes(request, context):
+    """only calculate the allowedTypes once per request
+    """
+    return context.allowedContentTypes()
+
+
+@implementer(IPlone)
 class Plone(BrowserView):
-    implements(IPlone)
 
     # Utility methods
 
@@ -84,9 +88,9 @@ class Plone(BrowserView):
         portal_membership = getToolByName(context, 'portal_membership')
         checkPerm = portal_membership.checkPermission
 
-        if checkPerm('Modify portal content', context) or \
-               checkPerm('Add portal content', context) or \
-               checkPerm('Review portal content', context):
+        if checkPerm('Modify portal content', context) \
+           or checkPerm('Add portal content', context) \
+           or checkPerm('Review portal content', context):
             return True
 
         if portal_membership.isAnonymousUser():
@@ -122,8 +126,8 @@ class Plone(BrowserView):
                 return True
 
         # Check to see if the user is able to add content
-        allowedTypes = [fti for fti in _allowedTypes(request, context)]
-        if allowedTypes:
+        currentAllowedTypes = [fti for fti in allowedTypes(request, context)]
+        if currentAllowedTypes:
             return True
 
         return False
@@ -282,7 +286,10 @@ class Plone(BrowserView):
         """Adds a marker interface to the view if it is "the" view for the
         context May only be called from a template.
         """
-        log_deprecated("@@plone_view/mark_view as been deprecated, you should use @@plone_layout/mark_view")
+        log_deprecated(
+            "@@plone_view/mark_view as been deprecated, you should use "
+            "@@plone_layout/mark_view"
+        )
         context = aq_inner(self.context)
         layout = getMultiAdapter((context, self.request), name=u'plone_layout')
         layout.mark_view(view)
@@ -290,7 +297,10 @@ class Plone(BrowserView):
     def hide_columns(self, column_left, column_right):
         """Returns a CSS class matching the current column status.
         """
-        log_deprecated("@@plone_view/hide_columns as been deprecated, you should use @@plone_layout/hide_columns")
+        log_deprecated(
+            "@@plone_view/hide_columns as been deprecated, you should use "
+            "@@plone_layout/hide_columns"
+        )
         context = aq_inner(self.context)
         layout = getMultiAdapter((context, self.request), name=u'plone_layout')
         return layout.hide_columns(column_left, column_right)
@@ -298,7 +308,10 @@ class Plone(BrowserView):
     def icons_visible(self):
         """Returns True if icons should be shown or False otherwise.
         """
-        log_deprecated("@@plone_view/icons_visible as been deprecated, you should use @@plone_layout/icons_visible")
+        log_deprecated(
+            "@@plone_view/icons_visible as been deprecated, you should use "
+            "@@plone_layout/icons_visible"
+        )
         context = aq_inner(self.context)
         layout = getMultiAdapter((context, self.request), name=u'plone_layout')
         return layout.icons_visible()
@@ -310,7 +323,10 @@ class Plone(BrowserView):
         globally or just for anonymous users with the icon_visibility property
         in site_properties.
         """
-        log_deprecated("@@plone_view/getIcon as been deprecated, you should use @@plone_layout/getIcon")
+        log_deprecated(
+            "@@plone_view/getIcon as been deprecated, you should use "
+            "@@plone_layout/getIcon"
+        )
         context = aq_inner(self.context)
         layout = getMultiAdapter((context, self.request), name=u'plone_layout')
         return layout.getIcon(item)
@@ -319,7 +335,10 @@ class Plone(BrowserView):
         """Determine whether a column should be shown. The left column is
         called plone.leftcolumn; the right column is called plone.rightcolumn.
         """
-        log_deprecated("@@plone_view/have_portlets as been deprecated, you should use @@plone_layout/have_portlets")
+        log_deprecated(
+            "@@plone_view/have_portlets as been deprecated, you should "
+            "use @@plone_layout/have_portlets"
+        )
         context = aq_inner(self.context)
         layout = getMultiAdapter((context, self.request), name=u'plone_layout')
         return layout.have_portlets(manager_name, view=view)
@@ -327,7 +346,10 @@ class Plone(BrowserView):
     def bodyClass(self, template, view):
         """Returns the CSS class to be used on the body tag.
         """
-        log_deprecated("@@plone_view/bodyClass as been deprecated, you should use @@plone_layout/bodyClass")
+        log_deprecated(
+            "@@plone_view/bodyClass as been deprecated, you should use "
+            "@@plone_layout/bodyClass"
+        )
         context = aq_inner(self.context)
         layout = getMultiAdapter((context, self.request), name=u'plone_layout')
         return layout.bodyClass(template, view)
