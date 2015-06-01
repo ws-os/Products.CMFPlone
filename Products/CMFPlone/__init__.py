@@ -1,7 +1,10 @@
+# -*- coding: utf-8 -*-
 from App.ImageFile import ImageFile
+from zope.i18nmessageid import MessageFactory
+
 import os
-import sys
 import pkg_resources
+import sys
 
 __version__ = pkg_resources.require("Products.CMFPlone")[0].version
 
@@ -131,35 +134,43 @@ def initialize(context):
     from Products.CMFCore import CachingPolicyManager
 
     # Plone tools
-    from Products.CMFPlone import PloneTool
+    from Products.CMFPlone import ActionsTool
+    from Products.CMFPlone import CatalogTool
     from Products.CMFPlone import MigrationTool
     from Products.CMFPlone import PloneControlPanel
-    from Products.CMFPlone import WorkflowTool
-    from Products.CMFPlone import URLTool
-    from Products.CMFPlone import RegistrationTool
+    from Products.CMFPlone import PloneTool
     from Products.CMFPlone import PropertiesTool
-    from Products.CMFPlone import ActionsTool
-    from Products.CMFPlone import TypesTool
-    from Products.CMFPlone import CatalogTool
-    from Products.CMFPlone import SkinsTool
     from Products.CMFPlone import QuickInstallerTool
+    from Products.CMFPlone import RegistrationTool
+    from Products.CMFPlone import SkinsTool
     from Products.CMFPlone import TranslationServiceTool
+    from Products.CMFPlone import TypesTool
+    from Products.CMFPlone import URLTool
+    from Products.CMFPlone import WorkflowTool
+    from Products.CMFPlone.pas.groupdata import GroupDataTool
+    from Products.CMFPlone.pas.groups import GroupsTool
+    from Products.CMFPlone.pas.memberdata import MemberDataTool
+    from Products.CMFPlone.pas.membership import MembershipTool
 
     tools = (
-        PloneTool.PloneTool,
-        WorkflowTool.WorkflowTool,
+        ActionsTool.ActionsTool,
         CachingPolicyManager.CachingPolicyManager,
-        PropertiesTool.PropertiesTool,
+        CatalogTool.CatalogTool,
         MigrationTool.MigrationTool,
         PloneControlPanel.PloneControlPanel,
-        RegistrationTool.RegistrationTool,
-        URLTool.URLTool,
-        ActionsTool.ActionsTool,
-        TypesTool.TypesTool,
-        CatalogTool.CatalogTool,
-        SkinsTool.SkinsTool,
+        PloneTool.PloneTool,
+        PropertiesTool.PropertiesTool,
         QuickInstallerTool.QuickInstallerTool,
+        RegistrationTool.RegistrationTool,
+        SkinsTool.SkinsTool,
         TranslationServiceTool.TranslationServiceTool,
+        TypesTool.TypesTool,
+        URLTool.URLTool,
+        WorkflowTool.WorkflowTool,
+        GroupDataTool,
+        GroupsTool,
+        MemberDataTool,
+        MembershipTool
     )
 
     from Products.CMFCore.utils import ContentInit
@@ -198,12 +209,8 @@ def initialize(context):
         visibility=None
     )
 
-
-# Import PloneMessageFactory to create messages in the plone domain
-from zope.i18nmessageid import MessageFactory
+# messages in the plone domain
 PloneMessageFactory = MessageFactory('plone')
 
-# Import PloneLocalesMessageFactory to create messages in the
-# plonelocales domain
-from zope.i18nmessageid import MessageFactory
+# messages in the plonelocales domain
 PloneLocalesMessageFactory = MessageFactory('plonelocales')

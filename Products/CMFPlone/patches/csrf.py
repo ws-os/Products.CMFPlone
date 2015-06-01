@@ -1,4 +1,6 @@
-from plone.protect import protect, CheckAuthenticator
+# -*- coding: utf-8 -*-
+from plone.protect import CheckAuthenticator
+from plone.protect import protect
 
 # apply csrf-protection decorator to the given callable
 patch = protect(CheckAuthenticator)
@@ -19,9 +21,7 @@ def applyPatches():
     RegistrationTool.addMember = patch(RegistrationTool.addMember)
 
     from Products.CMFCore.MembershipTool import MembershipTool as MT
-    from Products.PlonePAS.tools.membership import MembershipTool as PMT
     MT.setPassword = patch(MT.setPassword)
-    PMT.setPassword = patch(PMT.setPassword)
     MT.setRoleMapping = patch(MT.setRoleMapping)
     MT.deleteMemberArea = patch(MT.deleteMemberArea)
     MT.setLocalRoles = patch(MT.setLocalRoles)
@@ -43,15 +43,6 @@ def applyPatches():
 
     from Products.CMFPlone.RegistrationTool import RegistrationTool
     RegistrationTool.editMember = patch(RegistrationTool.editMember)
-
-    from Products.PlonePAS.tools.groupdata import GroupData
-    GroupData.addMember = patch(GroupData.addMember)
-    GroupData.removeMember = patch(GroupData.removeMember)
-
-    from Products.PlonePAS.tools.groups import GroupsTool
-    GroupsTool.addPrincipalToGroup = patch(GroupsTool.addPrincipalToGroup)
-    GroupsTool.removePrincipalFromGroup = patch(
-        GroupsTool.removePrincipalFromGroup)
 
     from Products.PluggableAuthService.PluggableAuthService import \
          PluggableAuthService as PAS

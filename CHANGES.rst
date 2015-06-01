@@ -8,6 +8,10 @@ Changelog
 5.0b3 (unreleased)
 ------------------
 
+- Move tools from Products.PlonePAS to Products.CMFPlone (keep deprecated BBB
+  imports at old place).
+  [jensens]
+
 - Add undeclared zope.cachedescriptors dependency.
   [timo]
 
