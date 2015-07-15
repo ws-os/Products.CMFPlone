@@ -8,6 +8,9 @@ Changelog
 5.0b4 (unreleased)
 ----------------
 
+- Rename 'e-mail' to 'email'. Refs #622.
+  [jaroel]
+
 - Fix add-ons to be installed using CMFQuickInstaller (restore support
   for Extensions/Install.py)
   [datakurre]
