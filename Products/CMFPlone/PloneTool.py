@@ -967,7 +967,7 @@ class PloneTool(PloneBaseTool, UniqueObject, SimpleItem):
         use_all = site_settings.exposeDCMetaTags
 
         security_settings = registry.forInterface(
-            ISecuritySchema, prefix='plone')
+            ISecuritySchema, prefix='plone', check=False)
         view_about = security_settings.allow_anon_views_about \
             or not mt.isAnonymousUser()
 
