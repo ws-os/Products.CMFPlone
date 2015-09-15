@@ -1011,11 +1011,6 @@ class ISiteSchema(Interface):
                        _('For authenticated users only'))]),
         required=True)
 
-    external_links_open_new_window = schema.Bool(
-        title=_(u'Open external links in new a window'),
-        description=_(u''),
-        default=False,
-        required=False)
 
     toolbar_position = schema.Choice(
         title=_(u'Position where the toolbar is displayed'),
@@ -1317,3 +1312,12 @@ class ILoginSchema(Interface):
         default=False,
         required=False
     )
+
+
+class ILinkSchema(Interface):
+
+    external_links_open_new_window = schema.Bool(
+        title=_(u'Open external links in new a window'),
+        description=_(u''),
+        default=False,
+        required=False)
