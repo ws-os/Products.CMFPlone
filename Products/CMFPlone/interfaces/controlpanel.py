@@ -1095,8 +1095,8 @@ class ITypesSchema(Interface):
         required=False,
         default=('Folder',),
         value_type=schema.Choice(
-            vocabulary="plone.app.vocabularies.AllowableContentTypes"
-        )
+            source="plone.app.vocabularies.PortalTypes"
+        ),
     )
 
     redirect_links = schema.Bool(
