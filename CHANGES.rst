@@ -31,6 +31,8 @@ Changelog
 - Move calendar_starting_year and calendar_future_years_available to
   registry and Products.Archetypes.
   [pbauer]
+- Use registry lookup for types_use_view_action_in_listings
+  [esteele]
 
 - Add view @@hero to be included by plonetheme.barceloneta with diazo.
   [pbauer]
@@ -40,6 +42,7 @@ Changelog
 
 - remove unused code to create NavTree probably left from Plone 3.0 times
   and since a while handled by plone.app.portlets.
+
 - add navigation root registry value
   [jensens]
 
