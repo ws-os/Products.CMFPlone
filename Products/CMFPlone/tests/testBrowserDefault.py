@@ -237,7 +237,7 @@ class TestPloneToolBrowserDefault(unittest.TestCase):
         default = registry.get('plone.default_page', [])
         self.assertEqual(
             default,
-            (u'index_html', u'index.html', u'index.htm', u'FrontPage')
+            [u'index_html', u'index.html', u'index.htm', u'FrontPage']
             )
 
 
