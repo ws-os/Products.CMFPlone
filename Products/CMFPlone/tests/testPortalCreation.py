@@ -183,7 +183,7 @@ class TestPortalCreation(PloneTestCase.PloneTestCase, WarningInterceptor):
         # navtree_properties should contain the new properties
         self.assertTrue(self.properties.navtree_properties.hasProperty('parentMetaTypesNotToQuery'))
         self.assertFalse(self.properties.navtree_properties.hasProperty('sitemapDepth'))
-        self.assertFalse(self.properties.navtree_properties.hasProperty('showAllParents'))
+        self.assertTrue(self.properties.navtree_properties.hasProperty('showAllParents'))
         self.assertFalse(self.properties.navtree_properties.hasProperty('metaTypesNotToList'))
         self.assertFalse(self.properties.navtree_properties.hasProperty('sortAttribute'))
         self.assertFalse(self.properties.navtree_properties.hasProperty('sortOrder'))
@@ -218,18 +218,11 @@ class TestPortalCreation(PloneTestCase.PloneTestCase, WarningInterceptor):
         self.assertTrue('Plone Site' in settings.types_not_searched)
 
     def testNonDefaultPageTypes(self):
-        # We should have a default_page_types property
-        self.assertTrue(
-            self.properties.site_properties.hasProperty('default_page_types')
-        )
-        self.assertTrue(
-            'Folder' not in
-            self.properties.site_properties.getProperty('default_page_types')
-        )
-        self.assertTrue(
-            'Topic' in
-            self.properties.site_properties.getProperty('default_page_types')
-        )
+        # We should have a default_page_types setting
+        registry = self.portal.portal_registry
+        self.assertIn('plone.default_page_types', registry)
+        self.assertNotIn(u'Folder', registry['plone.default_page_types'])
+        self.assertIn(u'Document', registry['plone.default_page_types'])
 
     def testNoMembersAction(self):
         # There should not be a Members action

@@ -193,7 +193,7 @@ class TypesControlPanel(AutoExtensibleForm, form.EditForm):
                     default_page_types.append(safe_unicode(type_id))
                 elif not default_page_type and type_id in default_page_types:
                     default_page_types.remove(type_id)
-                types_settings.default_page_types = default_page_types
+                types_settings.default_page_types = tuple(default_page_types)
 
                 redirect_links = form.get('redirect_links', False)
                 types_settings.redirect_links = redirect_links
