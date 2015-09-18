@@ -1056,7 +1056,6 @@ class ISiteSchema(Interface):
                        _('For authenticated users only'))]),
         required=True)
 
-
     toolbar_position = schema.Choice(
         title=_(u'Position where the toolbar is displayed'),
         description=_(
