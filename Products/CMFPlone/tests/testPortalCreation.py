@@ -181,16 +181,20 @@ class TestPortalCreation(PloneTestCase.PloneTestCase, WarningInterceptor):
 
     def testNavTreeProperties(self):
         # navtree_properties should contain the new properties
-        self.assertTrue(self.properties.navtree_properties.hasProperty('metaTypesNotToList'))
         self.assertTrue(self.properties.navtree_properties.hasProperty('parentMetaTypesNotToQuery'))
-        self.assertTrue(self.properties.navtree_properties.hasProperty('sortAttribute'))
-        self.assertTrue(self.properties.navtree_properties.hasProperty('sortOrder'))
         self.assertTrue(self.properties.navtree_properties.hasProperty('sitemapDepth'))
         self.assertTrue(self.properties.navtree_properties.hasProperty('showAllParents'))
+        self.assertFalse(self.properties.navtree_properties.hasProperty('metaTypesNotToList'))
+        self.assertFalse(self.properties.navtree_properties.hasProperty('sortAttribute'))
+        self.assertFalse(self.properties.navtree_properties.hasProperty('sortOrder'))
 
         registry = getUtility(IRegistry)
         self.assertTrue('plone.workflow_states_to_show' in registry)
         self.assertTrue('plone.filter_on_workflow' in registry)
+        self.assertTrue('plone.root' in registry)
+        self.assertTrue('plone.sort_tabs_on' in registry)
+        self.assertTrue('plone.sort_tabs_reversed' in registry)
+        self.assertTrue('plone.displayed_types' in registry)
 
     def testSitemapAction(self):
         # There should be a sitemap action
@@ -636,22 +640,6 @@ class TestPortalCreation(PloneTestCase.PloneTestCase, WarningInterceptor):
             self.transforms.safe_html.get_parameter_value('disable_transform')
         except (AttributeError, KeyError):
             self.fail('safe_html transformation not updated')
-
-    def testNavtreePropertiesNormalized(self):
-        ntp = self.portal.portal_properties.navtree_properties
-        toRemove = ['skipIndex_html', 'showMyUserFolderOnly',
-                    'showFolderishSiblingsOnly', 'showFolderishChildrenOnly',
-                    'showNonFolderishObject', 'showTopicResults',
-                    'rolesSeeContentView', 'rolesSeeUnpublishedContent',
-                    'rolesSeeContentsView ', 'batchSize', 'sortCriteria',
-                    'croppingLength', 'forceParentsInBatch',
-                    'rolesSeeHiddenContent', 'typesLinkToFolderContents']
-        toAdd = {'name': '', 'root': '/', 'currentFolderOnlyInNavtree': False}
-        for property in toRemove:
-            self.assertEqual(ntp.getProperty(property, None), None)
-        for property, value in toAdd.items():
-            self.assertEqual(ntp.getProperty(property), value)
-        self.assertEqual(ntp.getProperty('bottomLevel'), 0)
 
     def testvcXMLRPCRemoved(self):
         # vcXMLRPC.js should no longer be registered
