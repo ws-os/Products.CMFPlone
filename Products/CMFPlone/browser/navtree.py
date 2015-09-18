@@ -120,7 +120,7 @@ class SitemapNavtreeStrategy(NavtreeStrategyBase):
             navtree_properties.getProperty('parentMetaTypesNotToQuery', ())
         registry = getUtility(IRegistry)
         self.viewActionTypes = registry.get(
-            'plone.types_view_action_in_listings', [])
+            'plone.types_use_view_action_in_listings', [])
 
         self.showAllParents = navtree_properties.getProperty(
             'showAllParents',

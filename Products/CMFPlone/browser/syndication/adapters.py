@@ -45,7 +45,7 @@ class BaseFeedData(object):
             self.pm = getToolByName(self.context, 'portal_membership')
         registry = getUtility(IRegistry)
         self.view_action_types = registry.get(
-            'plone.types_view_action_in_listings', [])
+            'plone.types_use_view_action_in_listings', [])
 
     @lazy_property
     def show_about(self):

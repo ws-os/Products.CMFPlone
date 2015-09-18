@@ -212,7 +212,7 @@ class AjaxSearch(Search):
             (self.context, self.request), name='plone')
         registry = getUtility(IRegistry)
         view_action_types = registry.get(
-            'plone.types_view_action_in_listings', [])
+            'plone.types_use_view_action_in_listings', [])
         for item in batch:
             url = item.getURL()
             if item.portal_type in view_action_types:
