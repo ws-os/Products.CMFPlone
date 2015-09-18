@@ -1179,9 +1179,9 @@ class ITypesSchema(Interface):
             u"when setting a defult page."),
         required=False,
         default=[
-            'Document',
-            'Event',
-            'News Item',
+            u'Document',
+            u'Event',
+            u'News Item',
         ],
         value_type=schema.TextLine()
     )

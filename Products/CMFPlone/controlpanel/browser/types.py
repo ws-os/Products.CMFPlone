@@ -121,9 +121,6 @@ class TypesControlPanel(AutoExtensibleForm, form.EditForm):
                 portal_types = getToolByName(self.context, 'portal_types')
                 portal_repository = getToolByName(self.context,
                                                   'portal_repository')
-                portal_properties = getToolByName(self.context,
-                                                  'portal_properties')
-                site_properties = getattr(portal_properties, 'site_properties')
 
                 fti = getattr(portal_types, type_id)
 
@@ -154,7 +151,7 @@ class TypesControlPanel(AutoExtensibleForm, form.EditForm):
                     else:
                         # check if we should add
                         if type_id not in versionable_types:
-                            versionable_types.append(type_id)
+                            versionable_types.append(safe_unicode(type_id))
                         self.add_versioning_behavior(fti)
 
                     for policy in portal_repository.listPolicies():
@@ -190,12 +187,13 @@ class TypesControlPanel(AutoExtensibleForm, form.EditForm):
                 default_page_type = form.get('default_page_type', False)
                 types_settings = registry.forInterface(
                     ITypesSchema, prefix="plone")
-                default_page_types = list(types_settings.default_page_types)
+                default_page_types = [
+                    safe_unicode(i) for i in types_settings.default_page_types]
                 if default_page_type and type_id not in default_page_types:
-                    default_page_types.append(type_id)
+                    default_page_types.append(safe_unicode(type_id))
                 elif not default_page_type and type_id in default_page_types:
                     default_page_types.remove(type_id)
-                types_settings.default_page_types = tuple(default_page_types)
+                types_settings.default_page_types = default_page_types
 
                 redirect_links = form.get('redirect_links', False)
                 types_settings.redirect_links = redirect_links
