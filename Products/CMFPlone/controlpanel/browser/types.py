@@ -174,9 +174,10 @@ class TypesControlPanel(AutoExtensibleForm, form.EditForm):
                         versionable_types
                     )
 
-                searchable = form.get('searchable', False)
-
+                # Set Registry-entries
                 registry = getUtility(IRegistry)
+
+                searchable = form.get('searchable', False)
                 site_settings = registry.forInterface(
                     ISearchSchema, prefix="plone")
                 blacklisted = [i for i in site_settings.types_not_searched]
@@ -186,9 +187,18 @@ class TypesControlPanel(AutoExtensibleForm, form.EditForm):
                     blacklisted.append(type_id)
                 site_settings.types_not_searched = tuple(blacklisted)
 
+                default_page_type = form.get('default_page_type', False)
+                types_settings = registry.forInterface(
+                    ITypesSchema, prefix="plone")
+                default_page_types = list(types_settings.default_page_types)
+                if default_page_type and type_id not in default_page_types:
+                    default_page_types.append(type_id)
+                elif not default_page_type and type_id in default_page_types:
+                    default_page_types.remove(type_id)
+                types_settings.default_page_types = tuple(default_page_types)
+
                 redirect_links = form.get('redirect_links', False)
-                type_settings = registry.forInterface(ITypesSchema, prefix="plone")
-                type_settings.redirect_links = redirect_links
+                types_settings.redirect_links = redirect_links
 
             # Update workflow
             if self.have_new_workflow() \
@@ -316,6 +326,11 @@ class TypesControlPanel(AutoExtensibleForm, form.EditForm):
         settings = registry.forInterface(ISearchSchema, prefix="plone")
         blacklisted = settings.types_not_searched
         return (self.type_id not in blacklisted)
+
+    def is_default_page_type(self):
+        registry = getUtility(IRegistry)
+        settings = registry.forInterface(ITypesSchema, prefix="plone")
+        return self.type_id in settings.default_page_types
 
     def is_redirect_links_enabled(self):
         if self.type_id == 'Link':

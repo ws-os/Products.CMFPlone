@@ -1134,7 +1134,7 @@ class IDateAndTimeSchema(Interface):
 
 
 class ITypesSchema(Interface):
-    """
+    """Controlpanel settings for the types settings.
     """
     types_link_to_folder_contents = schema.List(
         title=_(u'Types linking to folder contents in folder contents view'),
@@ -1170,6 +1170,20 @@ class ITypesSchema(Interface):
                     u"Link's URL?"),
         required=False,
         default=True
+    )
+
+    default_page_types = schema.Tuple(
+        title=_(u"Types that can be set as a default page"),
+        description=_(
+            u"The content types that should be available for selection "
+            u"when setting a defult page."),
+        required=False,
+        default=[
+            'Document',
+            'Event',
+            'News Item',
+        ],
+        value_type=schema.TextLine()
     )
 
 
