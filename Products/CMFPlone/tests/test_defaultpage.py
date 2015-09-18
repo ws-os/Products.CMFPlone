@@ -1,6 +1,6 @@
 # -*- coding: utf-8 -*-
 from zope.component import getUtility
-from plone.registry import IRegistry
+from plone.registry.interfaces import IRegistry
 from plone.app.testing import setRoles
 from plone.app.testing import TEST_USER_ID
 from Products.CMFPlone.testing import PRODUCTS_CMFPLONE_INTEGRATION_TESTING
