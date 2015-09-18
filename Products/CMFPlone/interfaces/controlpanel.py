@@ -1172,7 +1172,7 @@ class ITypesSchema(Interface):
         default=True
     )
 
-    default_page_types = schema.Tuple(
+    default_page_types = schema.List(
         title=_(u"Types that can be set as a default page"),
         description=_(
             u"The content types that should be available for selection "
