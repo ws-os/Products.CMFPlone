@@ -181,8 +181,6 @@ class TestBaseNavTree(PloneTestCase.PloneTestCase):
                          '/plone/folder2/folder21/doc211')
 
     def testTopLevelWithPortalFactory(self):
-        ntp = self.portal.portal_properties.navtree_properties
-        ntp.manage_changeProperties(topLevel=1)
         id = self.portal.generateUniqueId('Document')
         typeName = 'Document'
         newObject = self.portal.folder1.restrictedTraverse(

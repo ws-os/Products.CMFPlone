@@ -33,9 +33,6 @@ class NavtreeQueryBuilder(object):
     """
 
     def __init__(self, context):
-        portal_properties = getToolByName(context, 'portal_properties')
-        navtree_properties = getattr(portal_properties, 'navtree_properties')
-
         registry = getUtility(IRegistry)
         navigation_settings = registry.forInterface(INavigationSchema,
                                                     prefix="plone")
@@ -61,9 +58,7 @@ class NavtreeQueryBuilder(object):
         else:
             query['path'] = {'query': currentPath, 'navtree': 1}
 
-        topLevel = navtree_properties.getProperty('topLevel', 0)
-        if topLevel and topLevel > 0:
-            query['path']['navtree_start'] = topLevel + 1
+        query['path']['navtree_start'] = 0
 
         # XXX: It'd make sense to use 'depth' for bottomLevel, but it doesn't
         # seem to work with EPI.
@@ -122,10 +117,7 @@ class SitemapNavtreeStrategy(NavtreeStrategyBase):
         self.viewActionTypes = registry.get(
             'plone.types_use_view_action_in_listings', [])
 
-        self.showAllParents = navtree_properties.getProperty(
-            'showAllParents',
-            True
-        )
+        self.showAllParents =True
         self.rootPath = getNavigationRoot(context)
 
         membership = getToolByName(context, 'portal_membership')
@@ -212,8 +204,6 @@ class DefaultNavtreeStrategy(SitemapNavtreeStrategy):
         SitemapNavtreeStrategy.__init__(self, context, view)
         portal_properties = getToolByName(context, 'portal_properties')
         navtree_properties = getattr(portal_properties, 'navtree_properties')
-        # XXX: We can't do this with a 'depth' query to EPI...
-        self.bottomLevel = navtree_properties.getProperty('bottomLevel', 0)
         if view is not None:
             self.rootPath = view.navigationTreeRootPath()
         else:

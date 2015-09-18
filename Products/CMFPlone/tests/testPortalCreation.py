@@ -182,7 +182,7 @@ class TestPortalCreation(PloneTestCase.PloneTestCase, WarningInterceptor):
     def testNavTreeProperties(self):
         # navtree_properties should contain the new properties
         self.assertTrue(self.properties.navtree_properties.hasProperty('parentMetaTypesNotToQuery'))
-        self.assertTrue(self.properties.navtree_properties.hasProperty('sitemapDepth'))
+        self.assertFalse(self.properties.navtree_properties.hasProperty('sitemapDepth'))
         self.assertFalse(self.properties.navtree_properties.hasProperty('showAllParents'))
         self.assertFalse(self.properties.navtree_properties.hasProperty('metaTypesNotToList'))
         self.assertFalse(self.properties.navtree_properties.hasProperty('sortAttribute'))
