@@ -269,9 +269,9 @@ class TestBaseNavTree(PloneTestCase.PloneTestCase):
         )
 
     def testRootIsCurrent(self):
-        ntp = self.portal.portal_properties.navtree_properties
-        ntp.manage_changeProperties(currentFolderOnlyInNavtree=True)
-        view = self.view_class(self.portal.folder2, self.request)
+        view = self.view_class(self.portal.folder2,
+                               self.request,
+                               currentFolderOnly=True)
         tree = view.navigationTree()
         self.assertTrue(tree)
         self.assertEqual(
