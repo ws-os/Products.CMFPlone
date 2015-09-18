@@ -1096,6 +1096,20 @@ class ISiteSchema(Interface):
         required=False,
     )
 
+    default_page = schema.List(
+        title=_(u'Default page ids'),
+        description=_(
+            u"Select which ids can act as fallback default pages for",
+            u"a container."
+        ),
+        required=True,
+        default=[u'index_html',
+                 u'index.html',
+                 u'index.htm',
+                 u'FrontPage'],
+        value_type=schema.TextLine()
+    )
+
 
 class IDateAndTimeSchema(Interface):
     """Controlpanel settings for date and time related settings.

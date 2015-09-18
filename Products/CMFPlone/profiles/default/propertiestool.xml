@@ -18,12 +18,6 @@
    <element value="Site Administrator"/>
    <element value="Reviewer"/>
   </property>
-  <property name="default_page" type="lines">
-   <element value="index_html"/>
-   <element value="index.html"/>
-   <element value="index.htm"/>
-   <element value="FrontPage"/>
-  </property>
   <property name="search_results_description_length" type="int">160</property>
   <property name="ellipsis" type="string">...</property>
  </object>
