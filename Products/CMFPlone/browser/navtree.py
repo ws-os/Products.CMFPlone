@@ -36,6 +36,10 @@ class NavtreeQueryBuilder(object):
         portal_properties = getToolByName(context, 'portal_properties')
         navtree_properties = getattr(portal_properties, 'navtree_properties')
 
+        registry = getUtility(IRegistry)
+        navigation_settings = registry.forInterface(INavigationSchema,
+                                                    prefix="plone")
+
         # Acquire a custom nav query if available
         customQuery = getattr(context, 'getCustomNavQuery', None)
         if customQuery is not None and utils.safe_callable(customQuery):
@@ -68,18 +72,15 @@ class NavtreeQueryBuilder(object):
         query['portal_type'] = utils.typesToList(context)
 
         # Apply the desired sort
-        sortAttribute = navtree_properties.getProperty('sortAttribute', None)
+        sortAttribute = navigation_settings.sort_tabs_on
         if sortAttribute is not None:
             query['sort_on'] = sortAttribute
-            sortOrder = navtree_properties.getProperty('sortOrder', None)
-            if sortOrder is not None:
-                query['sort_order'] = sortOrder
+            if navigation_settings.sort_tabs_reversed:
+                query['sort_order'] = 'desc'
+            else:
+                query['sort_order'] = 'asc'
 
         # Filter on workflow states, if enabled
-        registry = getUtility(IRegistry)
-        navigation_settings = registry.forInterface(INavigationSchema,
-                                                    prefix="plone")
-
         if navigation_settings.filter_on_workflow:
             query['review_state'] = navigation_settings.workflow_states_to_show
 
