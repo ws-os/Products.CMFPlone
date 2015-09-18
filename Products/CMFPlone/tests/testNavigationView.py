@@ -83,8 +83,7 @@ class TestBaseNavTree(PloneTestCase.PloneTestCase):
                 self.fail()
 
     def testShowAllParentsOverridesNavTreeExcludesItemsWithExcludeProp(self):
-        # Make sure that items whose ids are in the idsNotToList navTree
-        # property are not included
+        # Make sure excluded items are not included in the navtree
         self.portal.folder2.setExcludeFromNav(True)
         self.portal.folder2.reindexObject()
         self.navigation_settings.show_excluded_items = True
