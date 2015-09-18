@@ -892,6 +892,13 @@ class INavigationSchema(Interface):
         required=True
     )
 
+    sitemap_depth = schema.Int(
+        title=_(u"Sitemap depth"),
+        description=_(u"Number of folder levels to show in the site map."),
+        default=3,
+        required=True
+    )
+
 
 class ISearchSchema(Interface):
 

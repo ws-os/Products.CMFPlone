@@ -183,7 +183,7 @@ class TestPortalCreation(PloneTestCase.PloneTestCase, WarningInterceptor):
         # navtree_properties should contain the new properties
         self.assertTrue(self.properties.navtree_properties.hasProperty('parentMetaTypesNotToQuery'))
         self.assertTrue(self.properties.navtree_properties.hasProperty('sitemapDepth'))
-        self.assertTrue(self.properties.navtree_properties.hasProperty('showAllParents'))
+        self.assertFalse(self.properties.navtree_properties.hasProperty('showAllParents'))
         self.assertFalse(self.properties.navtree_properties.hasProperty('metaTypesNotToList'))
         self.assertFalse(self.properties.navtree_properties.hasProperty('sortAttribute'))
         self.assertFalse(self.properties.navtree_properties.hasProperty('sortOrder'))
@@ -191,6 +191,7 @@ class TestPortalCreation(PloneTestCase.PloneTestCase, WarningInterceptor):
         registry = getUtility(IRegistry)
         self.assertTrue('plone.workflow_states_to_show' in registry)
         self.assertTrue('plone.filter_on_workflow' in registry)
+        self.assertTrue('plone.sitemap_depth' in registry)
         self.assertTrue('plone.root' in registry)
         self.assertTrue('plone.sort_tabs_on' in registry)
         self.assertTrue('plone.sort_tabs_reversed' in registry)

@@ -97,11 +97,10 @@ class SitemapQueryBuilder(NavtreeQueryBuilder):
     def __init__(self, context):
         NavtreeQueryBuilder.__init__(self, context)
         portal_url = getToolByName(context, 'portal_url')
-        portal_properties = getToolByName(context, 'portal_properties')
-        navtree_properties = getattr(portal_properties, 'navtree_properties')
-        sitemapDepth = navtree_properties.getProperty('sitemapDepth', 2)
+        registry = getUtility(IRegistry)
+        sitemap_depth = registry.get('plone.sitemap_depth', 3)
         self.query['path'] = {'query': portal_url.getPortalPath(),
-                              'depth': sitemapDepth}
+                              'depth': sitemap_depth}
 
 
 @implementer(INavtreeStrategy)

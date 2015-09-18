@@ -397,8 +397,7 @@ class TestSiteMap(PloneTestCase.PloneTestCase):
         subfolder221 = subfolder22.subfolder221
 
         # Increase depth
-        ntp = self.portal.portal_properties.navtree_properties
-        ntp.manage_changeProperties(sitemapDepth=5)
+        self.portal.portal_registry['plone.sitemap_depth'] = 5
 
         view = self.view_class(self.portal, self.request)
         sitemap = view.siteMap()
