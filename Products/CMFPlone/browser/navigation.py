@@ -119,8 +119,6 @@ class CatalogNavigationTabs(BrowserView):
         member = mtool.getAuthenticatedMember().id
         catalog = getToolByName(context, 'portal_catalog')
 
-        result = []
-
         if actions is None:
             context_state = getMultiAdapter(
                 (context, self.request),
@@ -128,12 +126,13 @@ class CatalogNavigationTabs(BrowserView):
             )
             actions = context_state.actions(category)
 
-            # Build result dict
-            # first the actions
-            for actionInfo in actions:
-                data = actionInfo.copy()
-                data['name'] = data['title']
-                result.append(data)
+        # Build result dict
+        result = []
+        # first the actions
+        for actionInfo in actions:
+            data = actionInfo.copy()
+            data['name'] = data['title']
+            result.append(data)
 
         # check whether we only want actions
         if not navigation_settings.generate_tabs:
