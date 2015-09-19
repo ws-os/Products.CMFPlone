@@ -899,6 +899,14 @@ class INavigationSchema(Interface):
         required=True
     )
 
+    parent_types_not_to_query = schema.List(
+        title=_(u"Hide children of these types"),
+        description=_(u"Hide content inside the following types in Navigation."),
+        default=[u'TempFolder'],
+        value_type=schema.TextLine(),
+        required=False,
+    )
+
 
 class ISearchSchema(Interface):
 

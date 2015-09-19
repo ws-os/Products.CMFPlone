@@ -125,7 +125,7 @@ class TestBaseNavTree(PloneTestCase.PloneTestCase):
                 )
 
     def testNonStructuralFolderHidesChildren(self):
-        # Make sure NonStructuralFolders act as if parentMetaTypesNotToQuery
+        # Make sure NonStructuralFolders act as if parent_types_not_to_query
         # is set.
         f = dummy.NonStructuralFolder('ns_folder')
         self.folder._setObject('ns_folder', f)

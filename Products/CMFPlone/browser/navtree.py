@@ -109,15 +109,13 @@ class SitemapNavtreeStrategy(NavtreeStrategyBase):
 
         portal_url = getToolByName(context, 'portal_url')
         self.portal = portal_url.getPortalObject()
-        portal_properties = getToolByName(context, 'portal_properties')
-        navtree_properties = getattr(portal_properties, 'navtree_properties')
-        self.parentTypesNQ = \
-            navtree_properties.getProperty('parentMetaTypesNotToQuery', ())
         registry = getUtility(IRegistry)
+        self.parentTypesNQ = registry.get(
+            'plone.parent_types_not_to_query', [])
         self.viewActionTypes = registry.get(
             'plone.types_use_view_action_in_listings', [])
 
-        self.showAllParents =True
+        self.showAllParents = True
         self.rootPath = getNavigationRoot(context)
 
         membership = getToolByName(context, 'portal_membership')
@@ -202,8 +200,6 @@ class DefaultNavtreeStrategy(SitemapNavtreeStrategy):
 
     def __init__(self, context, view=None):
         SitemapNavtreeStrategy.__init__(self, context, view)
-        portal_properties = getToolByName(context, 'portal_properties')
-        navtree_properties = getattr(portal_properties, 'navtree_properties')
         if view is not None:
             self.rootPath = view.navigationTreeRootPath()
         else:

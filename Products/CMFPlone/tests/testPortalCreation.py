@@ -181,7 +181,7 @@ class TestPortalCreation(PloneTestCase.PloneTestCase, WarningInterceptor):
 
     def testNavTreeProperties(self):
         # navtree_properties should contain the new properties
-        self.assertTrue(self.properties.navtree_properties.hasProperty('parentMetaTypesNotToQuery'))
+        self.assertFalse(self.properties.navtree_properties.hasProperty('parentMetaTypesNotToQuery'))
         self.assertFalse(self.properties.navtree_properties.hasProperty('sitemapDepth'))
         self.assertFalse(self.properties.navtree_properties.hasProperty('showAllParents'))
         self.assertFalse(self.properties.navtree_properties.hasProperty('metaTypesNotToList'))
@@ -196,6 +196,7 @@ class TestPortalCreation(PloneTestCase.PloneTestCase, WarningInterceptor):
         self.assertTrue('plone.sort_tabs_on' in registry)
         self.assertTrue('plone.sort_tabs_reversed' in registry)
         self.assertTrue('plone.displayed_types' in registry)
+        self.assertTrue('plone.parent_types_not_to_query' in registry)
 
     def testSitemapAction(self):
         # There should be a sitemap action
