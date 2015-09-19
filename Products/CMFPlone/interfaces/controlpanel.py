@@ -1118,10 +1118,10 @@ class ISiteSchema(Interface):
         value_type=schema.TextLine()
     )
 
-    default_charset = schema.TextLine(
+    default_charset = schema.ASCIILine(
         title=_(u"Site default character set"),
         description=_(u''),
-        default=u'utf-8',
+        default='utf-8',
         required=True,
     )
 
@@ -1299,10 +1299,10 @@ class IMailSchema(Interface):
         default=None,
         required=True)
 
-    email_charset = schema.TextLine(
+    email_charset = schema.ASCIILine(
         title=_(u"Email characterset"),
         description=_(u'Characterset to use when sending emails.'),
-        default=u'utf-8',
+        default='utf-8',
         required=True,
     )
 
