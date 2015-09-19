@@ -14,7 +14,5 @@
    <element value="Site Administrator"/>
    <element value="Reviewer"/>
   </property>
-  <property name="search_results_description_length" type="int">160</property>
-  <property name="ellipsis" type="string">...</property>
  </object>
 </object>
