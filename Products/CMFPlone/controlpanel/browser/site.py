@@ -22,6 +22,7 @@ class SiteControlPanelForm(controlpanel.RegistryEditForm):
         super(SiteControlPanelForm, self).updateWidgets()
         # hide the default_page field/widgets
         self.widgets['default_page'].mode = interfaces.HIDDEN_MODE
+        self.widgets['default_charset'].mode = interfaces.HIDDEN_MODE
 
 
 class SiteControlPanel(controlpanel.ControlPanelFormWrapper):

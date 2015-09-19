@@ -1110,6 +1110,13 @@ class ISiteSchema(Interface):
         value_type=schema.TextLine()
     )
 
+    default_charset = schema.TextLine(
+        title=_(u"Site default character set"),
+        description=_(u''),
+        default=u'utf-8',
+        required=True,
+    )
+
 
 class IDateAndTimeSchema(Interface):
     """Controlpanel settings for date and time related settings.

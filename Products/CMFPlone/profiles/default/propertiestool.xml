@@ -8,7 +8,6 @@
  </object>
  <object name="site_properties" meta_type="Plone Property Sheet">
   <property name="title">Site wide properties</property>
-  <property name="default_charset" type="string">utf-8</property>
   <property name="allowRolesToAddKeywords" type="lines">
    <element value="Manager"/>
    <element value="Site Administrator"/>
