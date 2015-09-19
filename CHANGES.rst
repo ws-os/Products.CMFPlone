@@ -22,6 +22,9 @@ Changelog
 - Hide document byline viewlet by default.
   [esteele]
 
+- Move portal property email_charset to the registry.
+  [esteele]
+
 - Fix #950: Missing personal toolbar when expanding the horizontal toolbar
   [ichim-david]
 
