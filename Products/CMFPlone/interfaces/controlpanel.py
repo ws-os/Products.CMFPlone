@@ -1285,6 +1285,13 @@ class IMailSchema(Interface):
         default=None,
         required=True)
 
+    email_charset = schema.TextLine(
+        title=_(u"Email characterset"),
+        description=_(u'Characterset to use when sending emails.'),
+        default=u'utf-8',
+        required=True,
+    )
+
 
 class IMarkupSchema(Interface):
 
