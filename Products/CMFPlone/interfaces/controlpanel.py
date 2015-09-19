@@ -1125,6 +1125,20 @@ class ISiteSchema(Interface):
         required=True,
     )
 
+    roles_allowed_to_add_keywords = schema.List(
+        title=_(u'Roles that can add keywords'),
+        description=_(
+            u"help_allow_roles_to_add_keywords",
+            default=u"Only the following roles can add new keywords "),
+        required=False,
+        default=[
+            u"Manager",
+            u"Site Administrator",
+            u"Reviewer",
+        ],
+        value_type=schema.Choice(vocabulary="plone.app.vocabularies.Roles"),
+    )
+
 
 class IDateAndTimeSchema(Interface):
     """Controlpanel settings for date and time related settings.
