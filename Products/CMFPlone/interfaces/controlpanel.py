@@ -889,14 +889,6 @@ class ISearchSchema(Interface):
 
 class ISecuritySchema(Interface):
 
-    enable_self_reg = schema.Bool(
-        title=_(u'Enable self-registration'),
-        description=_(
-            u"Allows users to register themselves on the site. If "
-            u"not selected, only site managers can add new users."),
-        default=False,
-        required=False)
-
     enable_user_pwd_choice = schema.Bool(
         title=_(u'Let users select their own passwords'),
         description=_(
@@ -946,6 +938,19 @@ class ISecuritySchema(Interface):
             u"When not turned on, the default is to use the same as the "
             u"login name, or when using the email address as login name we "
             u"generate a user id based on the fullname."),
+        default=False,
+        required=False)
+
+
+class IExtendedSecuritySchema(ISecuritySchema):
+    """Security schema with additional settings that are handled outside of
+    plone.registry.
+    """
+    enable_self_reg = schema.Bool(
+        title=_(u'Enable self-registration'),
+        description=_(
+            u"Allows users to register themselves on the site. If "
+            u"not selected, only site managers can add new users."),
         default=False,
         required=False)
 
