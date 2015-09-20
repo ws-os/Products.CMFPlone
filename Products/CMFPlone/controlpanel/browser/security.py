@@ -70,10 +70,11 @@ class ExtendedRegistryEditForm(controlpanel.RegistryEditForm):
 
     Your form class should subclass this form and define the
     ``registry_schema`` and ``schema``class attributes, pointing to the
-    relevant interfaces::
+    relevant interfaces, and optional ``registry_schema_prefix``::
 
       class MyForm(RegistryProxyEditForm):
           registry_schema = IMyRegistrySettings
+          registry_schema_prefix = "plone"
           schema = IExtendedSettings
 
     To handle the additional fields in the ``IExtendedSettings`` schema,
@@ -83,6 +84,7 @@ class ExtendedRegistryEditForm(controlpanel.RegistryEditForm):
 
       class MyForm(RegistryProxyEditForm):
           registry_schema = IMyRegistrySettings
+          registry_schema_prefix = "plone"
           schema = IExtendedSettings
 
           def get_extra_field(self):
@@ -93,10 +95,19 @@ class ExtendedRegistryEditForm(controlpanel.RegistryEditForm):
 
           extra_field = property(get_extra_field, set_extra_field)
     """
+    registry_schema_prefix = None
+
+    @property
+    def registry_schema(self):
+        raise NotImplementedError(
+            "The class deriving from ExtendedRegistryEditForm must have a "
+            "'registry_schema' property"
+        )
+
     def getContent(self):
         record_proxy = getUtility(IRegistry).forInterface(
             self.registry_schema,
-            prefix=self.schema_prefix
+            prefix=self.registry_schema_prefix
         )
         return ExtendedRecordsProxy(
             record_proxy=record_proxy,
@@ -109,8 +120,8 @@ class SecurityControlPanelForm(ExtendedRegistryEditForm):
     id = "SecurityControlPanel"
     label = _(u"Security Settings")
     registry_schema = ISecuritySchema
+    registry_schema_prefix = "plone"
     schema = IExtendedSecuritySchema
-    schema_prefix = "plone"
 
     def get_enable_self_reg(self):
         portal = self.context
