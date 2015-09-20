@@ -1118,13 +1118,6 @@ class ISiteSchema(Interface):
         value_type=schema.TextLine()
     )
 
-    default_charset = schema.ASCIILine(
-        title=_(u"Site default character set"),
-        description=_(u''),
-        default='utf-8',
-        required=True,
-    )
-
     roles_allowed_to_add_keywords = schema.List(
         title=_(u'Roles that can add keywords'),
         description=_(
