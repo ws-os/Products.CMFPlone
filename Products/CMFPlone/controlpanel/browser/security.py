@@ -17,63 +17,79 @@ import logging
 logger = logging.getLogger('Products.CMFPlone')
 
 
-class ContextProxy(object):
-    def __init__(self, record_proxy=None, interfaces=None, form=None):
+class ExtendedRecordsProxy(object):
+    """This is similar to ``plone.registry.recordsproxy.RecordsProxy`` but
+    also handles fields that are not part of the registry.
+
+    This should be mostly used in combination with ``RegistryProxyEditForm``.
+
+    :param record_proxy: proxy that handles the registry fields
+    :type record_proxy: plone.registry.recordsproxy.RecordsProxy
+    :param obj: object that handles the fields that are not part of
+        the registry
+    :type obj: object
+    :param schema: schema with registry and non-registry fields
+        (the interface that this proxy provides)
+    :type schema: zope.interface.Interface
+    """
+
+    def __init__(self, record_proxy=None, obj=None, schema=None):
         self.__record_proxy = record_proxy
-        self.__form = form
-        alsoProvides(self, *interfaces)
+        self.__obj = obj
+        alsoProvides(self, schema)
 
     def __getattr__(self, name):
-        if name.startswith('__') or name.startswith('_ContextProxy__'):
+        if name.startswith('__') or name.startswith('_ExtendedRecordsProxy__'):
             return object.__getattr__(self, name)
-        if name in self.__record_proxy.__schema__:
+        elif name in self.__record_proxy.__schema__:
             return getattr(self.__record_proxy, name)
         else:
-            return getattr(self.__form, name)
+            return getattr(self.__obj, name)
 
     def __setattr__(self, name, value):
-        if name.startswith('__') or name.startswith('_ContextProxy__'):
+        if name.startswith('__') or name.startswith('_ExtendedRecordsProxy__'):
             return object.__setattr__(self, name, value)
         if name in self.__record_proxy.__schema__:
             return setattr(self.__record_proxy, name, value)
         else:
-            return setattr(self.__form, name, value)
+            return setattr(self.__obj, name, value)
 
 
-class RegistryProxyEditForm(controlpanel.RegistryEditForm):
-    """Registry edit form that can contain fields that are not part of
-    the registry schema.
+class ExtendedRegistryEditForm(controlpanel.RegistryEditForm):
+    """Registry edit form that can handle additional fields which are not part
+    of the registry schema.
 
-    This form base class is useful if your form needs to work with fields that
-    are not part of the registry. First define a schema with fields that will
-    be stored in the registry (see ``RegistryEditForm`` for more information).
-    Then define a separate schema with fields which will not be part of
-    the registry. This schema should extend the registry schema::
+    To use this, first define a schema with fields that will be stored in the
+    registry (see ``RegistryEditForm`` for more information). Then define a
+    another schema with fields which will not be a part of the registry. The
+    schema with additional fields should extend the registry schema::
 
-      class IExtendedSettings(IMySettings):
+      class IExtendedSettings(IMyRegistrySettings):
           # define additional non-registry fields here
           extra_field = schema.TextLine(title=u'Extra field')
 
-    Your form class should subclass this form and define the ``schema`` and
-    ``extended_schema``class attributes, pointing to the relevant interfaces::
+    Your form class should subclass this form and define the
+    ``registry_schema`` and ``schema``class attributes, pointing to the
+    relevant interfaces::
 
       class MyForm(RegistryProxyEditForm):
-          schema = IMySettings
-          extended_schema = IExtendedSettings
+          registry_schema = IMyRegistrySettings
+          schema = IExtendedSettings
 
     To handle the additional fields in the ``IExtendedSettings`` schema,
     you need to define a property on your form class that gets and sets the
-    field value (property name has to be the same as the name of the field)::
+    field value (property name has to be the same as the name of the field in
+    the schema)::
 
       class MyForm(RegistryProxyEditForm):
-          schema = IMySettings
-          extended_schema = IExtendedSettings
+          registry_schema = IMyRegistrySettings
+          schema = IExtendedSettings
 
           def get_extra_field(self):
               # get the field value from some location other than the registry
 
           def set_extra_field(self, value):
-              # set the field value to some location other than the registry
+              # store the field value to some location other than the registry
 
           extra_field = property(get_extra_field, set_extra_field)
     """
@@ -82,12 +98,14 @@ class RegistryProxyEditForm(controlpanel.RegistryEditForm):
             self.registry_schema,
             prefix=self.schema_prefix
         )
-        interfaces = [self.schema]
-        return ContextProxy(record_proxy=record_proxy, interfaces=interfaces,
-                            form=self)
+        return ExtendedRecordsProxy(
+            record_proxy=record_proxy,
+            obj=self,
+            schema=self.schema,
+        )
 
 
-class SecurityControlPanelForm(RegistryProxyEditForm):
+class SecurityControlPanelForm(ExtendedRegistryEditForm):
     id = "SecurityControlPanel"
     label = _(u"Security Settings")
     registry_schema = ISecuritySchema
