@@ -59,6 +59,18 @@ class SecurityControlPanelEventsTest(unittest.TestCase):
         self.security_settings.enable_self_reg = True
         self.assertTrue(self._is_self_reg_enabled())
 
+    def test_handle_enable_self_reg_permission_manually_removed(self):
+        self.security_settings.enable_self_reg = True
+        self.portal.manage_permission(
+            'Add portal member', roles=[], acquire=0)
+        self.assertFalse(self.security_settings.enable_self_reg)
+
+    def test_handle_enable_self_reg_permission_manually_added(self):
+        self.security_settings.enable_self_reg = False
+        self.portal.manage_permission(
+            'Add portal member', roles=['Anonymous'], acquire=0)
+        self.assertTrue(self.security_settings.enable_self_reg)
+
     def test_handle_enable_user_folders_condition_check(self):
         """Check that this event handler is not run for other ISecuritySchema
         records.
