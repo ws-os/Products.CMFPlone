@@ -146,6 +146,10 @@ def initialize(context):
     from Products.CMFPlone import SkinsTool
     from Products.CMFPlone import QuickInstallerTool
     from Products.CMFPlone import TranslationServiceTool
+    from Products.CMFPlone.pas.tools.groupdata import GroupDataTool
+    from Products.CMFPlone.pas.tools.groups import GroupsTool
+    from Products.CMFPlone.pas.tools.membership import MembershipTool
+    from Products.CMFPlone.pas.tools.memberdata import MemberDataTool
 
     tools = (
         PloneTool.PloneTool,
@@ -162,6 +166,10 @@ def initialize(context):
         SkinsTool.SkinsTool,
         QuickInstallerTool.QuickInstallerTool,
         TranslationServiceTool.TranslationServiceTool,
+        GroupDataTool,
+        GroupsTool,
+        MembershipTool,
+        MemberDataTool,
     )
 
     from Products.CMFCore.utils import ContentInit
