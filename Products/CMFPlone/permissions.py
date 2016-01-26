@@ -65,3 +65,19 @@ from Products.CMFCore.permissions import View
 
 security.declarePublic('ViewManagementScreens')
 from Products.CMFCore.permissions import ViewManagementScreens
+
+security.declarePublic('AddGroups')
+AddGroups = 'Add Groups'
+
+security.declarePublic('DeleteGroups')
+DeleteGroups = 'Delete Groups'
+
+security.declarePublic('ManageGroups')
+ManageGroups = 'Manage Groups'
+
+security.declarePublic('SetGroupOwnership')
+SetGroupOwnership = 'Set Group Ownership'
+
+security.declarePublic('ViewGroups')
+ViewGroups = 'View Groups'
+
