@@ -28,11 +28,9 @@ from Products.CMFPlone.pas.tools.memberdata import MemberData
 from Products.PlonePAS.utils import CleanupTemp
 from Products.PluggableAuthService.PluggableAuthService import \
     _SWALLOWABLE_PLUGIN_EXCEPTIONS
-from Products.PluggableAuthService.interfaces.authservice import \
-    IPluggableAuthService
 from Products.PluggableAuthService.interfaces.plugins import \
     IGroupManagement
-from ZPublisher.Converters import type_converters
+from zope.deprecation import deprecate
 from zope.interface import implementer
 import logging
 
@@ -62,7 +60,6 @@ class GroupDataTool(UniqueObject, SimpleItem, PropertyManager):
 
     def wrapGroup(self, g):
         """Returns an object implementing the GroupData interface."""
-
         gid = g.getId()
         members = self._members
         if gid not in members:
@@ -94,6 +91,7 @@ class GroupDataTool(UniqueObject, SimpleItem, PropertyManager):
         transactions and to reduce the necessary number of
         entries.
         '''
+        logger.error('we use registerGroupData')
         self._members[id] = aq_base(g)
 
 
@@ -115,8 +113,8 @@ class GroupData(SimpleItem):
         # The reference will be removed by notifyModified().
         self._tool = tool
 
-    def _getGRUF(self,):
-        return self.acl_users
+    def _getAclUsers(self,):
+        return getToolByName(self, 'acl_users')
 
     @security.private
     def notifyModified(self):
@@ -168,12 +166,12 @@ class GroupData(SimpleItem):
         gtool = self.portal_groups
         ret = []
         for u_name in gtool.getGroupMembers(self.getId()):
-            usr = self._getGRUF().getUserById(u_name)
+            usr = self._getAclUsers().getUserById(u_name)
             # getUserById from
             #   Products.PluggableAuthService.PluggableAuthService
             # The returned object is not wrapped, we wrapped it below
             if not usr:
-                usr = self._getGRUF().getGroupById(u_name)
+                usr = self._getAclUsers().getGroupById(u_name)
                 # getGroupById from Products.PlonePAS.pas
                 # The returned object is already wrapped
                 if not usr:
@@ -195,9 +193,9 @@ class GroupData(SimpleItem):
         md = self.portal_memberdata
         ret = []
         for u_name in self.getGroup().getMemberIds():
-            usr = self._getGRUF().getUserById(u_name)
+            usr = self._getAclUsers().getUserById(u_name)
             if not usr:
-                usr = self._getGRUF().getGroupById(u_name)
+                usr = self._getAclUsers().getGroupById(u_name)
                 if not usr:
                     logger.debug(
                         "Group has a non-existing principal {0}".format(u_name)
@@ -297,21 +295,9 @@ class GroupData(SimpleItem):
         """
         sheets = None
 
-        if not IPluggableAuthService.providedBy(self.acl_users):
-            # Defer to base impl in absence of PAS, a PAS group, or
-            # property sheets
-            return self._gruf_setGroupProperties(mapping)
-        else:
-            # It's a PAS! Whee!
-            group = self.getGroup()
-            sheets = getattr(group, 'getOrderedPropertySheets', lambda: [])()
-
-            # We won't always have PlonePAS groups, due to acquisition,
-            # nor are guaranteed property sheets
-            if not sheets:
-                # Defer to base impl if we have a PAS but no property
-                # sheets.
-                return self._gruf_setGroupProperties(mapping)
+        # It's a PAS! Whee!
+        group = self.getGroup()
+        sheets = getattr(group, 'getOrderedPropertySheets', lambda: [])()
 
         # If we got this far, we have a PAS and some property sheets.
         # XXX track values set to defer to default impl
@@ -330,25 +316,9 @@ class GroupData(SimpleItem):
         if modified:
             self.notifyModified()
 
-    def _gruf_setGroupProperties(self, mapping):
-        '''Sets the properties of the member.
-        '''
-        # Sets the properties given in the MemberDataTool.
-        tool = self.getTool()
-        for id in tool.propertyIds():
-            if id in mapping:
-                if id not in self.__class__.__dict__:
-                    value = mapping[id]
-                    if isinstance(value, str):
-                        proptype = tool.getPropertyType(id) or 'string'
-                        if proptype in type_converters:
-                            value = type_converters[proptype](value)
-                    setattr(self, id, value)
-
-        # Hopefully we can later make notifyModified() implicit.
-        self.notifyModified()
-
     @security.public
+    @deprecate('Using old style properties on groups is deprecated and wont '
+               'be supported in Plone 6.0')
     def getProperties(self):
         """ Return the properties of this group. Properties are as usual
             in Zope.
@@ -364,6 +334,8 @@ class GroupData(SimpleItem):
         return ret
 
     @security.public
+    @deprecate('Using old style properties on groups is deprecated and wont '
+               'be supported in Plone 6.0')
     def getProperty(self, id, default=None):
         """PAS-specific method to fetch a group's properties. Looks
         through the ordered property sheets.
@@ -457,11 +429,8 @@ class GroupData(SimpleItem):
         """Check to see if a user has a given role or roles."""
         return self.getGroup().has_role(roles, object)
 
-    # GRUF 3.2 methods...
-
     def getUserName(self):
         return self.getName()
-    getUserNameWithoutGroupPrefix = getUserName
 
     # IManageCapabilities methods
     def canDelete(self):
@@ -483,38 +452,27 @@ class GroupData(SimpleItem):
         return False
 
     def passwordInClear(self):
-        """True iff password can be retrieved in the clear (not hashed.)
+        """True if password can be retrieved in the clear (not hashed.)
 
         False for PAS. It provides no API for getting passwords,
         though it would be possible to add one in the future.
         """
         return False
 
-    def _groupdataHasProperty(self, prop_name):
-        gdata = getToolByName(self, 'portal_groupdata', None)
-        if gdata:
-            return gdata.hasProperty(prop_name)
-        return 0
-
     def canWriteProperty(self, prop_name):
         """True iff the group property named in 'prop_name'
         can be changed.
         """
         # this looks almost exactly like in memberdata. refactor?
-        if not IPluggableAuthService.providedBy(self.acl_users):
-            # not PAS; Groupdata is writable
-            return self._groupdataHasProperty(prop_name)
-        else:
-            # it's PAS
-            group = self.getGroup()
-            sheets = getattr(group, 'getOrderedPropertySheets', lambda: [])()
-            for sheet in sheets:
-                if not sheet.hasProperty(prop_name):
-                    continue
-                if IMutablePropertySheet.providedBy(sheet):
-                    return 1
-                else:
-                    break  # shadowed by read-only
+        group = self.getGroup()
+        sheets = getattr(group, 'getOrderedPropertySheets', lambda: [])()
+        for sheet in sheets:
+            if not sheet.hasProperty(prop_name):
+                continue
+            if IMutablePropertySheet.providedBy(sheet):
+                return 1
+            else:
+                break  # shadowed by read-only
         return 0
 
     canAddToGroup = MemberData.canAddToGroup.im_func
