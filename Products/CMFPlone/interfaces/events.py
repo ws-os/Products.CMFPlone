@@ -1,3 +1,4 @@
+from Products.PluggableAuthService.interfaces.events import IUserLoggedInEvent
 from zope.component.interfaces import IObjectEvent
 from zope.interface import Attribute
 from zope.interface import Interface
@@ -21,3 +22,8 @@ class IConfigurationChangedEvent(Interface):
     context = Attribute("The configuration context which was changed.")
 
     data = Attribute("The configuration data which was changed.")
+
+
+class IUserInitialLoginInEvent(IUserLoggedInEvent):
+    """A user logs in for the first time in the portal.
+    """

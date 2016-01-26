@@ -21,9 +21,9 @@ from Products.CMFCore.permissions import SetOwnProperties
 from Products.CMFCore.permissions import View
 from Products.CMFCore.utils import _checkPermission
 from Products.CMFCore.utils import getToolByName
+from Products.CMFPlone.events import UserInitialLoginInEvent
 from Products.CMFPlone.interfaces import membership
 from Products.PlonePAS.config import HAS_PIL
-from Products.PlonePAS.events import UserInitialLoginInEvent
 from Products.PlonePAS.events import UserLoggedInEvent
 from Products.PlonePAS.events import UserLoggedOutEvent
 from Products.PlonePAS.utils import cleanId

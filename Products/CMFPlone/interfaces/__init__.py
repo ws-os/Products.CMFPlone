@@ -32,6 +32,7 @@ from controlpanel import IImagingSchema
 from events import IConfigurationChangedEvent
 from events import IReorderedEvent
 from events import ISiteManagerCreatedEvent
+from events import IUserInitialLoginInEvent
 from installable import INonInstallable
 from interface import IInterfaceTool
 from language import ILanguage

@@ -2,9 +2,11 @@ from zope.interface import implements
 from zope.component.interfaces import ObjectEvent
 
 from Products.CMFCore.utils import getToolByName
+from Products.PlonePAS.events import UserLoggedInEvent
 
 from interfaces import ISiteManagerCreatedEvent
 from interfaces import IReorderedEvent
+from interfaces import IUserInitialLoginInEvent
 
 
 class SiteManagerCreatedEvent(ObjectEvent):
@@ -15,6 +17,8 @@ class SiteManagerCreatedEvent(ObjectEvent):
 class ReorderedEvent(ObjectEvent):
     implements(IReorderedEvent)
 
+class UserInitialLoginInEvent(UserLoggedInEvent):
+    implements(IUserInitialLoginInEvent)
 
 def profileImportedEventHandler(event):
     """
