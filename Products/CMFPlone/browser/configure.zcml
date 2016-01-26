@@ -5,6 +5,7 @@
            i18n_domain="plone">
 
   <include file="admin.zcml" />
+  <include file="pas.zcml" />
   <include file="caching.zcml" zcml:condition="installed z3c.caching"/>
 
   <class class="Products.CMFPlone.Portal.PloneSite">

@@ -8,7 +8,7 @@ from DateTime import DateTime
 from OFS.Image import Image
 from Products.CMFCore.tests.base.testcase import WarningInterceptor
 from Products.CMFCore.utils import getToolByName
-from Products.PlonePAS.browser.member import PASMemberView
+from Products.CMFPlone.browser.pas import PASMemberView
 from Products.PlonePAS.plugins.ufactory import PloneUser
 from Products.CMFPlone.interfaces.membership import IMembershipTool
 from Products.CMFPlone.tests import dummy
