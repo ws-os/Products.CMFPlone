@@ -5,6 +5,8 @@ from AccessControl.requestmethod import postonly
 from Acquisition import aq_base
 from App.class_init import InitializeClass
 from OFS.SimpleItem import SimpleItem
+from plone.protect import CheckAuthenticator
+from plone.protect import protect
 from Products.CMFCore.utils import UniqueObject
 from Products.CMFCore.utils import getToolByName
 from Products.CMFCore.utils import registerToolInterface
@@ -190,6 +192,7 @@ class GroupsTool(UniqueObject, SimpleItem):
     # basic principal mgmt
     ##
 
+    @protect(CheckAuthenticator)
     @security.protected(ManageGroups)
     @postonly
     def addPrincipalToGroup(self, principal_id, group_id, REQUEST=None):
@@ -201,6 +204,7 @@ class GroupsTool(UniqueObject, SimpleItem):
                 return True
         return False
 
+    @protect(CheckAuthenticator)
     @security.protected(ManageGroups)
     @postonly
     def removePrincipalFromGroup(self, principal_id, group_id, REQUEST=None):

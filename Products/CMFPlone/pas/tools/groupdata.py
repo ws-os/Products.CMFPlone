@@ -1,8 +1,8 @@
 # -*- coding: utf-8 -*-
 from AccessControl import ClassSecurityInfo
+from AccessControl import getSecurityManager
 from AccessControl import Permissions
 from AccessControl import Unauthorized
-from AccessControl import getSecurityManager
 from AccessControl.requestmethod import postonly
 from Acquisition import aq_base
 from Acquisition import aq_inner
@@ -11,24 +11,25 @@ from App.class_init import InitializeClass
 from BTrees.OOBTree import OOBTree
 from OFS.PropertyManager import PropertyManager
 from OFS.SimpleItem import SimpleItem
-from Products.CMFCore.utils import UniqueObject
+from plone.protect import CheckAuthenticator
+from plone.protect import protect
 from Products.CMFCore.utils import getToolByName
 from Products.CMFCore.utils import registerToolInterface
+from Products.CMFCore.utils import UniqueObject
+from Products.CMFPlone.pas.tools.memberdata import MemberData
 from Products.PlonePAS.interfaces.capabilities import IDeleteCapability
 from Products.PlonePAS.interfaces.capabilities import IManageCapabilities
-from Products.PluggableAuthService.interfaces.group import IGroupData
 from Products.PlonePAS.interfaces.group import IGroupDataTool
 from Products.PlonePAS.interfaces.group import IGroupManagement
 from Products.PlonePAS.interfaces.propertysheets import IMutablePropertySheet
-from Products.CMFPlone.pas.tools.memberdata import MemberData
 from Products.PlonePAS.utils import CleanupTemp
+from Products.PluggableAuthService.interfaces.group import IGroupData
 from Products.PluggableAuthService.PluggableAuthService import \
     _SWALLOWABLE_PLUGIN_EXCEPTIONS
 from Products.PluggableAuthService.interfaces.authservice import \
     IPluggableAuthService
 from ZPublisher.Converters import type_converters
 from zope.interface import implementer
-
 import logging
 
 logger = logging.getLogger('PlonePAS')
@@ -241,6 +242,7 @@ class GroupData(SimpleItem):
         # No right to edit this: we complain.
         return False
 
+    @protect(CheckAuthenticator)
     @security.public
     @postonly
     def addMember(self, id, REQUEST=None):
@@ -257,6 +259,7 @@ class GroupData(SimpleItem):
             except _SWALLOWABLE_PLUGIN_EXCEPTIONS:
                 pass
 
+    @protect(CheckAuthenticator)
     @security.public
     @postonly
     def removeMember(self, id, REQUEST=None):

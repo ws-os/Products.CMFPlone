@@ -41,15 +41,6 @@ def applyPatches():
     from Products.CMFPlone.RegistrationTool import RegistrationTool
     RegistrationTool.editMember = patch(RegistrationTool.editMember)
 
-    from Products.PlonePAS.tools.groupdata import GroupData
-    GroupData.addMember = patch(GroupData.addMember)
-    GroupData.removeMember = patch(GroupData.removeMember)
-
-    from Products.PlonePAS.tools.groups import GroupsTool
-    GroupsTool.addPrincipalToGroup = patch(GroupsTool.addPrincipalToGroup)
-    GroupsTool.removePrincipalFromGroup = patch(
-        GroupsTool.removePrincipalFromGroup)
-
     from Products.PluggableAuthService.PluggableAuthService import \
         PluggableAuthService as PAS
     PAS.userFolderAddUser = patch(PAS.userFolderAddUser)
