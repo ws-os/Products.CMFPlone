@@ -19,6 +19,8 @@ from Products.PlonePAS.utils import getGroupsForPrincipal
 from Products.PluggableAuthService.PluggableAuthService import \
     _SWALLOWABLE_PLUGIN_EXCEPTIONS
 from Products.PluggableAuthService.interfaces.plugins import \
+    IGroupIntrospection
+from Products.PluggableAuthService.interfaces.plugins import \
     IRoleAssignerPlugin
 from ZODB.POSException import ConflictError
 from zope.interface import implementer
@@ -334,7 +336,7 @@ class GroupsTool(UniqueObject, SimpleItem):
     @security.private
     def _getGroupIntrospectors(self):
         return self._getPlugins().listPlugins(
-            igroup.IGroupIntrospection
+            IGroupIntrospection
         )
 
     @security.private
@@ -343,7 +345,7 @@ class GroupsTool(UniqueObject, SimpleItem):
             igroup.IGroupManagement
         )
         return [(id, manager) for (id, manager) in managers
-                if igroup.IGroupIntrospection.providedBy(manager)]
+                if IGroupIntrospection.providedBy(manager)]
 
     ##
     # BBB
