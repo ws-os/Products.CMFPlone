@@ -11,11 +11,11 @@ from Products.CMFCore.utils import UniqueObject
 from Products.CMFCore.utils import getToolByName
 from Products.CMFCore.utils import registerToolInterface
 from Products.CMFPlone.interfaces.groups import IGroupTool
-from Products.PlonePAS.permissions import AddGroups
-from Products.PlonePAS.permissions import DeleteGroups
-from Products.PlonePAS.permissions import ManageGroups
-from Products.PlonePAS.permissions import SetGroupOwnership
-from Products.PlonePAS.permissions import ViewGroups
+from Products.CMFPlone.permissions import AddGroups
+from Products.CMFPlone.permissions import DeleteGroups
+from Products.CMFPlone.permissions import ManageGroups
+from Products.CMFPlone.permissions import SetGroupOwnership
+from Products.CMFPlone.permissions import ViewGroups
 from Products.PlonePAS.utils import getGroupsForPrincipal
 from Products.PluggableAuthService.PluggableAuthService import \
     _SWALLOWABLE_PLUGIN_EXCEPTIONS
