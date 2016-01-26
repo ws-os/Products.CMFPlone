@@ -11,7 +11,6 @@ from Products.CMFCore.utils import UniqueObject
 from Products.CMFCore.utils import getToolByName
 from Products.CMFCore.utils import registerToolInterface
 from Products.CMFPlone.interfaces.groups import IGroupTool
-from Products.PlonePAS.interfaces import group as igroup
 from Products.PlonePAS.permissions import AddGroups
 from Products.PlonePAS.permissions import DeleteGroups
 from Products.PlonePAS.permissions import ManageGroups
@@ -22,6 +21,8 @@ from Products.PluggableAuthService.PluggableAuthService import \
     _SWALLOWABLE_PLUGIN_EXCEPTIONS
 from Products.PluggableAuthService.interfaces.plugins import \
     IGroupIntrospection
+from Products.PluggableAuthService.interfaces.plugins import \
+    IGroupManagement
 from Products.PluggableAuthService.interfaces.plugins import \
     IRoleAssignerPlugin
 from ZODB.POSException import ConflictError
@@ -137,7 +138,7 @@ class GroupsTool(UniqueObject, SimpleItem):
             # add groups
             try:
                 groupmanagers = self.acl_users.plugins.listPlugins(
-                    igroup.IGroupManagement
+                    IGroupManagement
                 )
             except _SWALLOWABLE_PLUGIN_EXCEPTIONS:
                 logger.exception('Plugin listing error')
@@ -334,7 +335,7 @@ class GroupsTool(UniqueObject, SimpleItem):
     @security.private
     def _getGroupManagers(self):
         return self._getPlugins().listPlugins(
-            igroup.IGroupManagement
+            IGroupManagement
         )
 
     @security.private
@@ -346,7 +347,7 @@ class GroupsTool(UniqueObject, SimpleItem):
     @security.private
     def _getGroupTools(self):
         managers = self._getPlugins().listPlugins(
-            igroup.IGroupManagement
+            IGroupManagement
         )
         return [(id, manager) for (id, manager) in managers
                 if IGroupIntrospection.providedBy(manager)]

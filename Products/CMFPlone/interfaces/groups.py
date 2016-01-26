@@ -1,13 +1,14 @@
 # -*- coding: utf-8 -*-
-from Products.PluggableAuthService.interfaces import plugins
-from Products.PlonePAS.interfaces import group
+from Products.PluggableAuthService.interfaces.plugins import \
+    IGroupIntrospection
+from Products.PluggableAuthService.interfaces.plugins import \
+    IGroupManagement
+from Products.PluggableAuthService.interfaces.plugins import \
+    IGroupsPlugin
 from zope.interface import Interface
 
 
-class IGroupTool(plugins.IGroupIntrospection,
-                 group.IGroupManagement,
-                 plugins.IGroupsPlugin):
-
+class IGroupTool(IGroupIntrospection, IGroupManagement, IGroupsPlugin):
     """
     Defines an interface for managing and introspecting and
     groups and group membership.

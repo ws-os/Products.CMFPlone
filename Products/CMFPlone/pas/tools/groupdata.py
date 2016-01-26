@@ -30,6 +30,8 @@ from Products.PluggableAuthService.PluggableAuthService import \
     _SWALLOWABLE_PLUGIN_EXCEPTIONS
 from Products.PluggableAuthService.interfaces.authservice import \
     IPluggableAuthService
+from Products.PluggableAuthService.interfaces.plugins import \
+    IGroupManagement
 from ZPublisher.Converters import type_converters
 from zope.interface import implementer
 import logging
