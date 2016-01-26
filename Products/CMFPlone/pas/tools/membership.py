@@ -24,10 +24,10 @@ from Products.CMFCore.utils import getToolByName
 from Products.CMFPlone.events import UserInitialLoginInEvent
 from Products.CMFPlone.interfaces import membership
 from Products.PlonePAS.config import HAS_PIL
-from Products.PlonePAS.events import UserLoggedInEvent
-from Products.PlonePAS.events import UserLoggedOutEvent
 from Products.PlonePAS.utils import cleanId
 from Products.PlonePAS.utils import scale_image
+from Products.PluggableAuthService.events import UserLoggedIn
+from Products.PluggableAuthService.events import UserLoggedOut
 from ZODB.POSException import ConflictError
 from cStringIO import StringIO
 from plone.protect.interfaces import IDisableCSRFProtection
@@ -637,7 +637,7 @@ class MembershipTool(BaseTool):
         if self.setLoginTimes():
             event.notify(UserInitialLoginInEvent(user))
         else:
-            event.notify(UserLoggedInEvent(user))
+            event.notify(UserLoggedIn(user))
 
         if REQUEST is None:
             REQUEST = getattr(self, 'REQUEST', None)
@@ -703,7 +703,7 @@ class MembershipTool(BaseTool):
 
         user = getSecurityManager().getUser()
         if user is not None:
-            event.notify(UserLoggedOutEvent(user))
+            event.notify(UserLoggedOut(user))
 
     @security.protected(View)
     def immediateLogout(self):
