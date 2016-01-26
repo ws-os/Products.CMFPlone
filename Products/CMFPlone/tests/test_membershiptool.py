@@ -179,8 +179,8 @@ class TestMembershipTool(PloneTestCase, WarningInterceptor):
             'last_login_time': DateTime(last_login_time), })
 
     def makeRealImage(self):
-        import Products.PlonePAS as ppas
-        pas_path = os.path.dirname(ppas.__file__)
+        import Products.CMFPlone as plone_module
+        pas_path = os.path.dirname(plone_module.__file__)
         path = os.path.join(pas_path, 'tool.gif')
         image = open(path, 'rb')
         image_upload = dummy.FileUpload(dummy.FieldStorage(image))
