@@ -10,7 +10,7 @@ from plone.protect import protect
 from Products.CMFCore.utils import UniqueObject
 from Products.CMFCore.utils import getToolByName
 from Products.CMFCore.utils import registerToolInterface
-from Products.CMFPlone.interfaces import pas
+from Products.CMFPlone.interfaces.groups import IGroupTool
 from Products.PlonePAS.interfaces import group as igroup
 from Products.PlonePAS.permissions import AddGroups
 from Products.PlonePAS.permissions import DeleteGroups
@@ -35,7 +35,7 @@ class NotSupported(Exception):
     pass
 
 
-@implementer(pas.IGroupTool)
+@implementer(IGroupTool)
 class GroupsTool(UniqueObject, SimpleItem):
     """ This tool accesses group data through a acl_users object.
 
@@ -445,4 +445,4 @@ class GroupsTool(UniqueObject, SimpleItem):
 
 
 InitializeClass(GroupsTool)
-registerToolInterface('portal_groups', pas.IGroupTool)
+registerToolInterface('portal_groups', IGroupTool)

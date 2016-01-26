@@ -13,4 +13,9 @@ class IGroupTool(plugins.IGroupIntrospection,
     groups and group membership.
     """
 
+class IGroupDataTool(Interface):
 
+    def wrapGroup(group):
+        """
+        decorate a group with property management capabilities if needed
+        """
