@@ -16,6 +16,7 @@ from plone.protect import protect
 from Products.CMFCore.utils import getToolByName
 from Products.CMFCore.utils import registerToolInterface
 from Products.CMFCore.utils import UniqueObject
+from Products.CMFPlone.interfaces.groups import IGroupData
 from Products.CMFPlone.pas.tools.memberdata import MemberData
 from Products.PlonePAS.interfaces.capabilities import IDeleteCapability
 from Products.PlonePAS.interfaces.capabilities import IManageCapabilities
@@ -25,7 +26,6 @@ from Products.PlonePAS.interfaces.propertysheets import IMutablePropertySheet
 from Products.CMFPlone.interfaces.groups import IGroupDataTool
 from Products.CMFPlone.pas.tools.memberdata import MemberData
 from Products.PlonePAS.utils import CleanupTemp
-from Products.PluggableAuthService.interfaces.group import IGroupData
 from Products.PluggableAuthService.PluggableAuthService import \
     _SWALLOWABLE_PLUGIN_EXCEPTIONS
 from Products.PluggableAuthService.interfaces.authservice import \
