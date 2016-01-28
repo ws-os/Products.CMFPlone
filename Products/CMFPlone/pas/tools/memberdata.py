@@ -14,14 +14,11 @@ from Products.PlonePAS.interfaces.capabilities import IGroupCapability
 from Products.PlonePAS.interfaces.capabilities import IManageCapabilities
 from Products.PlonePAS.interfaces.capabilities import IPasswordSetCapability
 from Products.PlonePAS.interfaces.plugins import IUserManagement
-from Products.PlonePAS.interfaces.propertysheets import IMutablePropertySheet
-from Products.PluggableAuthService.interfaces.authservice import \
-    IPluggableAuthService
-from Products.PluggableAuthService.interfaces.plugins import \
-    IGroupManagement
+from Products.PluggableAuthService.interfaces.authservice import IPluggableAuthService  # noqa
+from Products.PluggableAuthService.interfaces.plugins import IGroupManagement
 from Products.PluggableAuthService.interfaces.plugins import IPropertiesPlugin
-from Products.PluggableAuthService.interfaces.plugins import \
-    IRoleAssignerPlugin
+from Products.PluggableAuthService.interfaces.plugins import IRoleAssignerPlugin  # noqa
+from Products.PluggableAuthService.interfaces.propertysheets import IMutablePropertySheet  # noqa
 from zope.interface import implementer
 
 _marker = object()

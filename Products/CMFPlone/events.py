@@ -1,24 +1,27 @@
-from zope.interface import implements
-from zope.component.interfaces import ObjectEvent
-
+# -*- coding: utf-8 -*-
 from Products.CMFCore.utils import getToolByName
+from Products.CMFPlone.interfaces import IReorderedEvent
+from Products.CMFPlone.interfaces import ISiteManagerCreatedEvent
+from Products.CMFPlone.interfaces import IUserInitialLoginInEvent
 from Products.PluggableAuthService.events import UserLoggedIn
-
-from interfaces import ISiteManagerCreatedEvent
-from interfaces import IReorderedEvent
-from interfaces import IUserInitialLoginInEvent
+from zope.component.interfaces import ObjectEvent
+from zope.interface import implementer
 
 
+@implementer(ISiteManagerCreatedEvent)
 class SiteManagerCreatedEvent(ObjectEvent):
+    pass
 
-    implements(ISiteManagerCreatedEvent)
 
-
+@implementer(IReorderedEvent)
 class ReorderedEvent(ObjectEvent):
-    implements(IReorderedEvent)
+    pass
 
+
+@implementer(IUserInitialLoginInEvent)
 class UserInitialLoginInEvent(UserLoggedIn):
-    implements(IUserInitialLoginInEvent)
+    pass
+
 
 def profileImportedEventHandler(event):
     """

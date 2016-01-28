@@ -1,18 +1,20 @@
 # -*- coding: utf-8 -*-
 from AccessControl import ClassSecurityInfo
-from AccessControl import Unauthorized
 from AccessControl import getSecurityManager
-from AccessControl.SecurityManagement import noSecurityManager
+from AccessControl import Unauthorized
 from AccessControl.requestmethod import postonly
+from AccessControl.SecurityManagement import noSecurityManager
 from Acquisition import aq_get
 from Acquisition import aq_inner
 from Acquisition import aq_parent
 from App.class_init import InitializeClass
 from App.special_dtml import DTMLFile
+from cStringIO import StringIO
 from DateTime import DateTime
 from OFS.Image import Image
-from Products.CMFCore.MembershipTool import MembershipTool as BaseTool
+from plone.protect.interfaces import IDisableCSRFProtection
 from Products.CMFCore.interfaces import IPropertiesTool
+from Products.CMFCore.MembershipTool import MembershipTool as BaseTool
 from Products.CMFCore.permissions import ListPortalMembers
 from Products.CMFCore.permissions import ManagePortal
 from Products.CMFCore.permissions import ManageUsers
@@ -23,15 +25,12 @@ from Products.CMFCore.utils import _checkPermission
 from Products.CMFCore.utils import getToolByName
 from Products.CMFPlone.events import UserInitialLoginInEvent
 from Products.CMFPlone.interfaces import membership
-from Products.PlonePAS.config import HAS_PIL
 from Products.PlonePAS.utils import cleanId
 from Products.PlonePAS.utils import scale_image
 from Products.PluggableAuthService.events import UserLoggedIn
 from Products.PluggableAuthService.events import UserLoggedOut
-from ZODB.POSException import ConflictError
-from cStringIO import StringIO
-from plone.protect.interfaces import IDisableCSRFProtection
 from zExceptions import BadRequest
+from ZODB.POSException import ConflictError
 from zope import event
 from zope.component import getUtility
 from zope.interface import alsoProvides
@@ -747,11 +746,6 @@ class MembershipTool(BaseTool):
             portrait_data = str(portrait.data)
             if portrait_data == '':
                 continue
-            if not HAS_PIL:
-                raise RuntimeError(
-                    'No Python Imaging Libraries (PIL) found. '
-                    'Unable to validate profile image. '
-                )
             try:
                 import PIL
                 PIL.Image.open(StringIO(portrait_data))
