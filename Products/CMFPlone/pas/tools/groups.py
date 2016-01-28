@@ -1,15 +1,15 @@
 # -*- coding: utf-8 -*-
 from AccessControl import ClassSecurityInfo
-from AccessControl.User import nobody
 from AccessControl.requestmethod import postonly
+from AccessControl.User import nobody
 from Acquisition import aq_base
 from App.class_init import InitializeClass
 from OFS.SimpleItem import SimpleItem
 from plone.protect import CheckAuthenticator
 from plone.protect import protect
-from Products.CMFCore.utils import UniqueObject
 from Products.CMFCore.utils import getToolByName
 from Products.CMFCore.utils import registerToolInterface
+from Products.CMFCore.utils import UniqueObject
 from Products.CMFPlone.interfaces.groups import IGroupTool
 from Products.CMFPlone.permissions import AddGroups
 from Products.CMFPlone.permissions import DeleteGroups
@@ -17,16 +17,13 @@ from Products.CMFPlone.permissions import ManageGroups
 from Products.CMFPlone.permissions import SetGroupOwnership
 from Products.CMFPlone.permissions import ViewGroups
 from Products.PlonePAS.utils import getGroupsForPrincipal
-from Products.PluggableAuthService.PluggableAuthService import \
-    _SWALLOWABLE_PLUGIN_EXCEPTIONS
-from Products.PluggableAuthService.interfaces.plugins import \
-    IGroupIntrospection
-from Products.PluggableAuthService.interfaces.plugins import \
-    IGroupManagement
-from Products.PluggableAuthService.interfaces.plugins import \
-    IRoleAssignerPlugin
+from Products.PluggableAuthService.interfaces.plugins import IGroupIntrospection  # noqa
+from Products.PluggableAuthService.interfaces.plugins import IGroupManagement  # noqa
+from Products.PluggableAuthService.interfaces.plugins import IRoleAssignerPlugin  # noqa
+from Products.PluggableAuthService.PluggableAuthService import _SWALLOWABLE_PLUGIN_EXCEPTIONS  # noqa
 from ZODB.POSException import ConflictError
 from zope.interface import implementer
+
 import logging
 
 logger = logging.getLogger('PluggableAuthService')
