@@ -28,7 +28,7 @@ from Products.CMFPlone.pas.tools.memberdata import MemberData
 from Products.PlonePAS.utils import CleanupTemp
 from Products.PluggableAuthService.interfaces.authservice import IPluggableAuthService  # noqa
 from Products.PluggableAuthService.interfaces.plugins import IGroupManagement  # noqa
-from Products.PluggableAuthService.interfaces.plugins import IMutablePropertySheet  # noqa
+from Products.PluggableAuthService.interfaces.propertysheets import IMutablePropertySheet  # noqa
 from Products.PluggableAuthService.PluggableAuthService import _SWALLOWABLE_PLUGIN_EXCEPTIONS  # noqa
 from zope.interface import implementer
 from ZPublisher.Converters import type_converters
