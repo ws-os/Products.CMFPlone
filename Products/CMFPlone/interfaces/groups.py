@@ -14,12 +14,14 @@ class IGroupTool(IGroupIntrospection, IGroupManagement, IGroupsPlugin):
     groups and group membership.
     """
 
+
 class IGroupDataTool(Interface):
 
     def wrapGroup(group):
         """
         decorate a group with property management capabilities if needed
         """
+
 
 class IGroupData(Interface):
     """ An abstract interface for accessing properties on a group object"""

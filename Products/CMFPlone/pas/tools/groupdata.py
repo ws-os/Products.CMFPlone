@@ -17,17 +17,13 @@ from Products.CMFCore.utils import getToolByName
 from Products.CMFCore.utils import registerToolInterface
 from Products.CMFCore.utils import UniqueObject
 from Products.CMFPlone.interfaces.groups import IGroupData
+from Products.CMFPlone.interfaces.groups import IGroupDataTool
 from Products.CMFPlone.pas.tools.memberdata import MemberData
 from Products.PlonePAS.interfaces.capabilities import IDeleteCapability
 from Products.PlonePAS.interfaces.capabilities import IManageCapabilities
-from Products.PluggableAuthService.interfaces.group import IGroupData
-from Products.PlonePAS.interfaces.group import IGroupManagement
-from Products.PlonePAS.interfaces.propertysheets import IMutablePropertySheet
-from Products.CMFPlone.interfaces.groups import IGroupDataTool
-from Products.CMFPlone.pas.tools.memberdata import MemberData
 from Products.PlonePAS.utils import CleanupTemp
 from Products.PluggableAuthService.interfaces.authservice import IPluggableAuthService  # noqa
-from Products.PluggableAuthService.interfaces.plugins import IGroupManagement  # noqa
+from Products.PluggableAuthService.interfaces.plugins import IGroupManagement
 from Products.PluggableAuthService.interfaces.propertysheets import IMutablePropertySheet  # noqa
 from Products.PluggableAuthService.PluggableAuthService import _SWALLOWABLE_PLUGIN_EXCEPTIONS  # noqa
 from zope.interface import implementer
