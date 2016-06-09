@@ -24,9 +24,12 @@ if not mtool.checkPermission('Copy or Move', context):
 pathName = url_quote_plus('paths:list')
 safePath = '/'.join(context.getPhysicalPath())
 orig_template = REQUEST['HTTP_REFERER'].split('?')[0]
-url = '%s/folder_rename_form?orig_template=%s&%s=%s' % (context.absolute_url(),
-                                                        orig_template,
-                                                        pathName,
-                                                        safePath)
+ajax_load = REQUEST['ajax_load']
+url = ('%s/folder_rename_form?orig_template=%s&%s=%s&ajax_load=%s' %
+               (context.absolute_url(),
+                orig_template,
+                pathName,
+                safePath,
+                ajax_load))
 
 REQUEST.RESPONSE.redirect(url)

@@ -35,8 +35,8 @@ jQuery.extend(jQuery.tools.overlay.conf,
 
 (function($) {
 
-	// static constructs
-	$.plonepopups = $.plonepopups || {};
+    // static constructs
+    $.plonepopups = $.plonepopups || {};
 
     $.extend($.plonepopups,
         {
@@ -154,6 +154,7 @@ jQuery(function($){
         {
             subtype: 'ajax',
             filter: common_content_filter,
+            formselector: '#content-core form',
             cssclass: 'overlay-rename',
             closeselector: '[name="form.button.Cancel"]',
             width:'40%'
