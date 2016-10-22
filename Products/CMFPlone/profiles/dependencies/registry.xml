@@ -153,13 +153,6 @@
       <value key="js">++plone++static/components/jquery/dist/jquery.min.js</value>
   </records>
 
-
-  <records prefix="plone.resources/JSXTransformer"
-            interface='Products.CMFPlone.interfaces.IResourceRegistry'>
-      <value key="js">++plone++static/components/react/JSXTransformer.js</value>
-      <value key="export">window.JSXTransformer</value>
-  </records>
-
   <records prefix="plone.resources/underscore"
             interface='Products.CMFPlone.interfaces.IResourceRegistry'>
       <value key="js">++plone++static/components/underscore/underscore.js</value>
@@ -353,7 +346,31 @@
 
   <records prefix="plone.resources/react"
             interface='Products.CMFPlone.interfaces.IResourceRegistry'>
-      <value key="js">++plone++static/components/react/react.js</value>
+      <value key="js">++plone++static/components/react/react.min.js</value>
+  </records>
+  <records prefix="plone.resources/react-dom"
+            interface='Products.CMFPlone.interfaces.IResourceRegistry'>
+      <value key="js">++plone++static/components/react/react-dom.min.js</value>
+  </records>
+  <records prefix="plone.resources/react-with-addons"
+            interface='Products.CMFPlone.interfaces.IResourceRegistry'>
+      <value key="js">++plone++static/components/react/react-with-addons.min.js</value>
+  </records>
+  <records prefix="plone.resources/eventEmitter"
+            interface='Products.CMFPlone.interfaces.IResourceRegistry'>
+      <value key="js">++plone++static/components/eventEmitter/EventEmitter.js</value>
+  </records>
+  <records prefix="plone.resources/object-assign"
+            interface='Products.CMFPlone.interfaces.IResourceRegistry'>
+      <value key="js">++resource++mockupjs/object-assign.js</value>
+  </records>
+  <records prefix="plone.resources/dispatcher"
+            interface='Products.CMFPlone.interfaces.IResourceRegistry'>
+      <value key="js">++resource++mockupjs/dispatcher.js</value>
+  </records>
+  <records prefix="plone.resources/es6-promise"
+            interface='Products.CMFPlone.interfaces.IResourceRegistry'>
+      <value key="js">++plone++static/components/es6-promise/es6-promise.js</value>
   </records>
 
   <records prefix="plone.resources/select2"
@@ -738,6 +755,7 @@
   <records prefix="plone.resources/mockup-patterns-querystring"
             interface='Products.CMFPlone.interfaces.IResourceRegistry'>
       <value key="js">++resource++mockup/querystring/pattern.js</value>
+      <value key="url">++resource++mockup/querystring</value>
       <value key="css">
         <element>++resource++mockup/querystring/pattern.querystring.less</element>
       </value>

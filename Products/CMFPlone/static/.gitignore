@@ -93,3 +93,12 @@ components/tinymce-builded/changelog.txt
 components/tinymce-builded/tools/saucelabs/
 components/tinymce-builded/tools/tasks/
 components/validate/
+components/es6-promise/es6-promise.auto.js
+components/es6-promise/es6-promise.auto.min.js
+components/es6-promise/es6-promise.min.js
+components/react/LICENSE
+components/react/PATENTS
+components/react/react-dom-server.js
+components/react/react-dom-server.min.js
+components/react/react-dom.js
+components/requirejs-bower/
