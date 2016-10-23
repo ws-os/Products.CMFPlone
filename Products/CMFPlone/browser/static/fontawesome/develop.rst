@@ -17,9 +17,3 @@ Updating bundle resources
 
 - Font-Awesome-SVG-PNG is a project to export SVGs from the fontawesome icons font.
   We're using those SVG icons, if you need to update them go to https://github.com/encharm/Font-Awesome-SVG-PNG and follow their instructions.
-
-
-Todo
-----
-
-- find a way to add the original iconname to the filename
