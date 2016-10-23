@@ -15,13 +15,8 @@ How to convert and icon font to svgs https://sarasoueidan.com/blog/icon-fonts-to
 Updating bundle resources
 -------------------------
 
-- Download the latest official release from http://fontawesome.io
-- To Convert the icon font to svg files go to https://icomoon.io/app
-- Import fontawesome-webfont.svg
-- Select all icons
-- Click the Generate SVG & More button.
--
-- Add those icons to fontawesome directory
+- Font-Awesome-SVG-PNG is a project to export SVGs from the fontawesome icons font.
+  We're using those SVG icons, if you need to update them go to https://github.com/encharm/Font-Awesome-SVG-PNG and follow their instructions.
 
 
 Todo
