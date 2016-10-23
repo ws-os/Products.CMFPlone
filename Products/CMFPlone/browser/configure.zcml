@@ -24,6 +24,10 @@
       name="plone-logo.png"
       />
 
+  <browser:resourceDirectory
+      name="fontawesome"
+      directory="./static/fontawesome" />
+
   <browser:page
       for="*"
       name="site-logo"
