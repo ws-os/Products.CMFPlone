@@ -8,6 +8,7 @@ Background
 ----------
 
 Why this ist useful https://css-tricks.com/icon-fonts-vs-svg/
+Why github did it https://github.com/blog/2112-delivering-octicons-with-svg
 What to look out https://css-tricks.com/gotchas-on-getting-svg-into-production/
 How to convert and icon font to svgs https://sarasoueidan.com/blog/icon-fonts-to-svg/
 
