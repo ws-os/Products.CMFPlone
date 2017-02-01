@@ -404,16 +404,8 @@ class CatalogTool(PloneBaseTool, BaseTool):
 
     __call__ = searchResults
 
-    def search(self, *args, **kw):
+    def search(self, query={}, **kw):
         # Wrap search() the same way that searchResults() is
-        query = {}
-
-        if args:
-            query = args[0]
-        elif 'query_request' in kw:
-            query = kw.get('query_request')
-
-        kw['query_request'] = query.copy()
 
         user = _getAuthenticatedUser(self)
         query['allowedRolesAndUsers'] = self._listAllowedRolesAndUsers(user)
@@ -421,9 +413,7 @@ class CatalogTool(PloneBaseTool, BaseTool):
         if not _checkPermission(AccessInactivePortalContent, self):
             query['effectiveRange'] = DateTime()
 
-        kw['query_request'] = query
-
-        return super(CatalogTool, self).search(**kw)
+        return super(CatalogTool, self).search(query, **kw)
 
     @security.protected(ManageZCatalogEntries)
     def clearFindAndRebuild(self):
