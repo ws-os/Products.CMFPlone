@@ -36,6 +36,12 @@ Bug fixes:
   This solves a problem, where Editors couldn't see inactive content, even though they had the required permission on a subpath of the portal (e.g. a subsite).
   [thet]
 
+- Remove last legacy Javascript ``highlight-searchterms.js``. 
+  Removes also the skins folder ``plone_ecmascript``. 
+  It was broken for all (Google, other search engines, own live search);
+  JS worked only when coming from Plone detailed search.
+  [jensens]
+
 
 5.1b2 (2017-02-20)
 ------------------
