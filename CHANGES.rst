@@ -36,10 +36,16 @@ Bug fixes:
   This solves a problem, where Editors couldn't see inactive content, even though they had the required permission on a subpath of the portal (e.g. a subsite).
   [thet]
 
+- Test: Wrong use of assertTrue in testResourceRegistries.
+  [jensens]
+
+- Fix issue popped iup after fix of use of assertTrue in testResourceRegistries: insert-before in legacy resource import was broken.
+  [jensens]
+
 - Remove last legacy Javascript ``highlight-searchterms.js``. 
   Removes also the skins folder ``plone_ecmascript``. 
-  It was broken for all (Google, other search engines, own live search);
-  JS worked only when coming from Plone detailed search.
+  It was broken for almost all use cases (Google, other search engines, own live search);
+  JS worked only when coming from Plone detailed search page.
   [jensens]
 
 
