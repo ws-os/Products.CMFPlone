@@ -5,6 +5,7 @@ from Products.CMFPlone import PloneMessageFactory as _
 from zope import schema
 from zope.interface import implementer
 from zope.interface import Interface
+from zope.interface import Invalid
 from zope.schema.vocabulary import SimpleTerm
 from zope.schema.vocabulary import SimpleVocabulary
 
@@ -1457,6 +1458,13 @@ class IUserGroupsSettingsSchema(Interface):
     )
 
 
+def validate_twitter_username(value):
+    if value and value.startswith('@'):
+        raise Invalid(
+            u'Twitter username should not include the "@" prefix character.')
+    return True
+
+
 class ISocialMediaSchema(Interface):
 
     share_social_data = schema.Bool(
@@ -1466,24 +1474,29 @@ class ISocialMediaSchema(Interface):
                       u'when shared'),
         default=True)
 
-    twitter_username = schema.TextLine(
-        title=_(u'Twitter Username'),
-        description=_(u'To identify things like Twitter Cards. Do not include the \'@\' prefix character.'),
+    twitter_username = schema.ASCIILine(
+        title=_(u'Twitter username'),
+        description=_(
+            u'To identify things like Twitter Cards. '
+            u'Do not include the "@" prefix character.'
+        ),
         required=False,
-        default=u'')
+        default='',
+        constraint=validate_twitter_username,
+    )
 
-    facebook_app_id = schema.TextLine(
+    facebook_app_id = schema.ASCIILine(
         title=_(u'Facebook App ID'),
         description=_(
             u'To be used with some integrations like Open Graph data'),
         required=False,
-        default=u'')
+        default='')
 
-    facebook_username = schema.TextLine(
+    facebook_username = schema.ASCIILine(
         title=_(u'Facebook username'),
         description=_(u'For linking Open Graph data to a Facebook account'),
         required=False,
-        default=u'')
+        default='')
 
 
 class IImagingSchema(Interface):

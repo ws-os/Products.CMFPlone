@@ -5,12 +5,26 @@
 Changelog
 =========
 
-5.1b3 (unreleased)
+5.1b4 (unreleased)
 ------------------
 
 Breaking changes:
 
 - *add item here*
+
+New features:
+
+- Update mockup to latest version.
+  [thet]
+
+Bug fixes:
+
+- Add constraint to avoid filling ``twitter_username`` field with strings starting with a "@" character.
+  [hvelarde]
+
+
+5.1b3 (2017-04-03)
+------------------
 
 New features:
 
@@ -25,6 +39,15 @@ New features:
   [didrix]
 
 Bug fixes:
+
+- Use canonical url instead of absolute url for RSS feed items.
+  This code is used for the social viewlet too.
+  So default pages are reported with their parent url.
+  Fixes `layout issue 118 <https://github.com/plone/plone.app.layout/issues/118>`_.
+  [maurits]
+
+- Fix social media schema field types of ``twitter_username``, ``facebook_app_id`` and ``facebook_username`` to be ``ASCIILine`` instead of ``TextLine``.
+  [hvelarde]
 
 - Show version of products in Add-ons control panel configlet.
   This fixes https://github.com/plone/Products.CMFPlone/issues/1472.
