@@ -23,7 +23,7 @@
     <metal:cache tal:replace="structure provider:plone.httpheaders" />
 
   <head>
-    <meta charset="UTF-8" />
+    <meta charset="utf-8" />
 
     <div tal:replace="structure provider:plone.htmlhead" />
 
