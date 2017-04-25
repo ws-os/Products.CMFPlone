@@ -23,6 +23,9 @@ New features:
 
 Bug fixes:
 
+- Fix HTML5 meta charset definition (previous definition was deprecated).
+  [malthe]
+
 - Fix default value for ``robots.txt`` to avoid issues with content containing "search" in the id.
   [hvelarde]
 
