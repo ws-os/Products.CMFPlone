@@ -47,7 +47,10 @@ Bug fixes:
 - fixed css-classes for thumb scales ...
   https://github.com/plone/Products.CMFPlone/issues/2077
   [fgrcon]
-   
+
+- Fix default image scale sizes, to fit default theme better
+  [MrTango]
+
 - Fix current value in group details edit form.
   [Gagaro]
 
@@ -110,7 +113,7 @@ Bug fixes:
   [jensens]
 
 - Fix possible ``mechanize.AmbiguityError`` in controlpanel tests.
-  [jensens] 
+  [jensens]
 
 5.1b3 (2017-04-03)
 ------------------
