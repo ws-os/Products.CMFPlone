@@ -3,7 +3,8 @@ from cStringIO import StringIO
 
 from zope.interface import implementer
 from zope.interface import Interface
-from zope.component import adapts, getUtility
+from zope.component import adapts
+from zope.component import getUtility
 from zope.schema import Choice, Tuple
 
 from AccessControl import getSecurityManager
@@ -17,6 +18,7 @@ from Products.CMFCore.interfaces import ISiteRoot
 from Products.CMFCore.utils import getToolByName
 from Products.CMFPlone.interfaces import IPloneSiteRoot
 from plone.app.redirector.interfaces import IRedirectionStorage
+
 
 from z3c.form import form, field
 
@@ -143,7 +145,7 @@ class RedirectsControlPanelAdapter(object):
 
     def __init__(self, context):
         self.context = context
-        self.rt = getToolByName(context, 'portal_redirection')
+        self.rt = getUtility(IRedirectionStorage)
 
     def get_managed_types(self):
         return self.rt.getRedirectionAllowedForTypes()
