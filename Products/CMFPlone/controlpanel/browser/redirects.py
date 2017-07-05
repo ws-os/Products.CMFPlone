@@ -1,7 +1,8 @@
 import csv
 from cStringIO import StringIO
 
-from zope.interface import implements, Interface
+from zope.interface import implementer
+from zope.interface import Interface
 from zope.component import adapts, getUtility
 from zope.schema import Choice, Tuple
 
@@ -135,10 +136,10 @@ class IAliasesSchema(Interface):
                               vocabulary="plone.app.vocabularies.ReallyUserFriendlyTypes"))
 
 
+@implementer(IAliasesSchema)
 class RedirectsControlPanelAdapter(object):
 
     adapts(IPloneSiteRoot)
-    implements(IAliasesSchema)
 
     def __init__(self, context):
         self.context = context
