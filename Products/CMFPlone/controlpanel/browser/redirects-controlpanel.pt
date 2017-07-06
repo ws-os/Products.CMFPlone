@@ -6,33 +6,46 @@
       metal:use-macro="context/prefs_main_template/macros/master"
       i18n:domain="plone">
 
-<metal:block metal:fill-slot="top_slot"
-             tal:define="dummy python:request.set('disable_border', 1)" />
-
   <body>
     <div metal:fill-slot="prefs_configlet_main">
-      <dl tal:condition="view/errors"
+      <dl
+          tal:condition="view/errors"
           class="portalMessage error">
         <dt>Error</dt>
         <dd>
           <p i18n:translate="error_bulk_upload">
             No aliases were added. Please correct these errors in your CSV file and try again:
           </p>
-          <table style="text-align: left; vertical-align: top" border="0" cellpadding="2" cellspacing="0">
+          <table
+              style="text-align: left; vertical-align: top"
+              border="0"
+              cellpadding="2"
+              cellspacing="0">
             <tr tal:repeat="error view/errors"
                 style="vertical-align: top">
               <td nowrap="nowrap">
-                <tal:block i18n:translate="label_bulk_upload_line">Line</tal:block> ${error/line_number}
-                <tal:block i18n:translate="label_bulk_upload_line_suffix">:</tal:block>
+                <tal:block i18n:translate="label_bulk_upload_line">
+                  Line
+                </tal:block>
+                ${error/line_number}
+                <tal:block i18n:translate="label_bulk_upload_line_suffix">
+                  :
+                </tal:block>
               </td>
-              <td>${error/line}</td>
-              <td>${error/message}</td>
+              <td>
+                ${error/line}
+              </td>
+              <td>
+                ${error/message}
+              </td>
             </tr>
           </table>
         </dd>
       </dl>
 
-      <h1 i18n:translate="heading_add_aliases">Manage aliases</h1>
+      <h1 i18n:translate="heading_add_aliases">
+        Manage aliases
+      </h1>
 
       <p i18n:translate="description_manage_aliases">
         Using this form, you can select for which types you want to manage
@@ -40,61 +53,75 @@
       </p>
 
 
-      <form tal:attributes="action view/view_url" method="post">
+      <form
+          action="${view/view_url}"
+          method="post">
         <tal:block tal:repeat="widget python: view.form.widgets.values()">
 
-            <div class="field"
-                 tal:define="description widget/field/description;
-                             error widget/error"
-                 tal:attributes="class python:'field'+(error and ' error' or '')">
+            <div
+                class="field"
+                tal:define="description widget/field/description;
+                            error widget/error"
+                tal:attributes="class python:'field'+(error and ' error' or '')">
 
-                <label i18n:translate=""
-                       tal:attributes="for widget/name"
-                       tal:content="widget/label">
-                    label
+                <label
+                    i18n:translate=""
+                    tal:attributes="for widget/name"
+                    tal:content="widget/label">
+                  label
                 </label>
 
-                <span class="fieldRequired"
-                      title="Required"
-                      i18n:attributes="title title_required;"
-                      i18n:translate="label_required"
-                      tal:condition="widget/required">
-                    (Required)
+                <span
+                    class="fieldRequired"
+                    title="Required"
+                    i18n:attributes="title title_required;"
+                    i18n:translate="label_required"
+                    tal:condition="widget/required">
+                  (Required)
                 </span>
 
-                <div class="formHelp"
-                     i18n:translate=""
-                     tal:content="description"
-                     tal:condition="description">
-                    field description
+                <div
+                    class="formHelp"
+                    i18n:translate=""
+                    tal:content="description"
+                    tal:condition="description">
+                  field description
                 </div>
 
-                <div tal:condition="error"
-                     tal:content="structure error">
-                    The Error
+                <div
+                    tal:condition="error"
+                    tal:content="structure error">
+                  The Error
                 </div>
 
-                <div class="widget" tal:content="structure widget">
-                    <input type="text" />
+                <div
+                    class="widget"
+                    tal:content="structure widget">
+                  <input type="text" />
                 </div>
             </div>
 
         </tal:block>
 
-        <div class="formControls"
-             i18n:domain="plone">
-          <input class="context"
-                 type="submit"
-                 value="Save"
-                 name="form.button.Save"
-                 i18n:attributes="value label_save;"
-                 />
+        <div
+            class="formControls"
+            i18n:domain="plone">
+          <input
+              class="context"
+              type="submit"
+              value="Save"
+              name="form.button.Save"
+              i18n:attributes="value label_save;" />
         </div>
       </form>
 
-      <form tal:attributes="action view/view_url" method="post">
+      <form
+          action="${view/view_url}"
+          method="post">
         <fieldset>
-          <legend i18n:translate="legend_all_existing_aliases">All existing aliases for this site</legend>
+          <legend i18n:translate="legend_all_existing_aliases">
+            All existing aliases for this site
+          </legend>
 
           <tal:redirects repeat="redirect view/redirects">
             <div>
@@ -112,35 +139,46 @@
                    type="submit"
                    value="Remove"
                    name="form.button.Remove"
-                   i18n:attributes="value"
-                   />
+                   i18n:attributes="value" />
           </div>
 
         </fieldset>
       </form>
 
-      <form tal:attributes="action view/view_url" method="post" enctype="multipart/form-data">
+      <form
+          tal:attributes="action view/view_url"
+          method="post"
+          enctype="multipart/form-data">
         <fieldset>
-          <legend i18n:translate="legend_bulk_upload">Bulk-upload aliases</legend>
+          <legend i18n:translate="legend_bulk_upload">
+            Bulk-upload aliases
+          </legend>
 
           <p i18n:translate="description_bulk_upload">
-            Add many aliases at once by uploading a CSV file. The first column should be the path to redirect from; the second, the path to redirect to. Both paths must be Plone-site-relative, starting with a slash (/).
+            Add many aliases at once by uploading a CSV file. The first column should be the path to
+            redirect from; the second, the path to redirect to. Both paths must be Plone-site-relative,
+            starting with a slash (/).
           </p>
           <p>
             <tal:block i18n:translate="example_caption_bulk_upload">Example:</tal:block><br />
-            <code i18n:translate="example_bulk_upload">/old-home-page.asp,/front-page<br />
-            /people/JoeT,/Users/joe-thurston</code>
+            <code i18n:translate="example_bulk_upload">
+              /old-home-page.asp,/front-page<br />
+              /people/JoeT,/Users/joe-thurston
+            </code>
           </p>
 
-          <input type="file" name="file" />
+          <input
+              type="file"
+              name="file" />
 
           <div class="formControls">
-            <input class="context"
-                   type="submit"
-                   value="Upload"
-                   name="form.button.Upload"
-                   i18n:attributes="value"
-                   />
+            <input
+                class="context"
+                type="submit"
+                value="Upload"
+                name="form.button.Upload"
+                i18n:attributes="value"
+              />
           </div>
 
         </fieldset>
