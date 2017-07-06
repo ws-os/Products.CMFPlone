@@ -146,7 +146,37 @@
       </form>
 
       <form
-          tal:attributes="action view/view_url"
+          action="${view/view_url}"
+          method="post">
+        <fieldset>
+          <legend i18n:translate="add_alias">
+            Add a new alias
+          </legend>
+
+          <label for="redirection">Source Path</label>
+          <input
+              type="text"
+              name="redirection">
+
+          <label for="target_path">Target Path</label>
+          <input
+              type="text"
+              name="target_path">
+
+          <div class="formControls">
+            <input class="context"
+                   type="submit"
+                   value="Add"
+                   name="form.button.Add"
+                   i18n:attributes="value" />
+          </div>
+
+        </fieldset>
+      </form>
+
+
+      <form
+          action="${view/view_url}"
           method="post"
           enctype="multipart/form-data">
         <fieldset>

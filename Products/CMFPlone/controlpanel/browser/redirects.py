@@ -59,7 +59,9 @@ def absolutize_path(path, context=None, is_alias=True):
             else:
                 context_path = "/".join(context.getPhysicalPath()[:-1])
                 path = "%s/%s" % (context_path, path)
-        if not err and is_alias:  # noqa XXX should we require Modify Alias permission on the target as well?
+        # Check whether obj exists and
+        # noqa XXX should we require Modify Alias permission on the target as well?
+        if not err and is_alias:
             source = path.split('/')
             while len(source):
                 obj = portal.unrestrictedTraverse(source, None)
@@ -218,12 +220,35 @@ class RedirectsControlPanel(BrowserView):
         elif 'form.button.Save' in form:
             dst = IAliasesSchema(self.context)
             dst.managed_types = self.request.form['form.widgets.managed_types']
+        elif 'form.button.Add' in form:
+            self.add(form['redirection'], form['target_path'], portal, storage, status)
         elif 'form.button.Upload' in form:
             self.upload(form['file'], portal, storage, status)
 
         self.form = RedirectsControlPanelForm(self.context, self.request)
         self.form.update()
         return self.template()
+
+    def add(self, redirection, target, portal, storage, status):
+        """Add the redirections from the form. If anything goes wrong, do nothing."""
+
+        abs_redirection, err = absolutize_path(redirection, is_alias=True)
+        abs_target, target_err = absolutize_path(target, is_alias=False)
+        
+        if err and target_err:
+            err = "{0} {1}".format(err, target_err)
+        elif target_err:
+            err = target_err
+        else:
+            if abs_redirection == abs_target:
+                err = _(u"Aliases that point to themselves will cause"
+                        u"an endless cycle of redirects.")
+                # TODO: detect indirect recursion
+
+        if not err:
+            storage.add(abs_redirection, abs_target)
+            status.addStatusMessage(_(u"Alias {0} &rarr; {1} added.").format(abs_redirection, abs_target),
+                                    type='info')
 
     def upload(self, file, portal, storage, status):
         """Add the redirections from the CSV file `file`. If anything goes wrong, do nothing."""
