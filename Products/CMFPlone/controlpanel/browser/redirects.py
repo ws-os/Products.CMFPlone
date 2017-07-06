@@ -252,6 +252,11 @@ class RedirectsControlPanel(BrowserView):
 
     def upload(self, file, portal, storage, status):
         """Add the redirections from the CSV file `file`. If anything goes wrong, do nothing."""
+
+        # No file picked. Theres gotta be a better way to handle this.
+        if not file.filename:
+            status.addStatusMessage(_(u"Please pick a file to upload."), type='info')
+            return
         # Turn all kinds of newlines into LF ones. The csv module doesn't do
         # its own newline sniffing and requires either \n or \r.
         file = StringIO('\n'.join(file.read().splitlines()))
