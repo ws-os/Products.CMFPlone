@@ -32,9 +32,6 @@ def absolutize_path(path, context=None, is_alias=True):
     if path is None or path == '':
         err = (is_alias and _(u"You have to enter an alias.")
                or _(u"You have to enter a target."))
-    elif '://' in path:
-        err = (is_alias and _(u"An alias is a path from the portal root and doesn't include http:// or alike.")  # noqa
-               or _(u"Target path must be relative to the portal root and not include http:// or the like."))  # noqa
     else:
         if path.startswith('/'):
             context_path = "/".join(portal.getPhysicalPath())
@@ -46,19 +43,13 @@ def absolutize_path(path, context=None, is_alias=True):
             else:
                 context_path = "/".join(context.getPhysicalPath()[:-1])
                 path = "%s/%s" % (context_path, path)
-        # Check whether obj exists and
-        # noqa XXX should we require Modify Alias permission on the target as well?
+        # Check whether obj exists at source path
         if not err and is_alias:
             source = path.split('/')
             while len(source):
                 obj = portal.unrestrictedTraverse(source, None)
                 if obj is None:
                     source = source[:-1]
-                else:
-                    # if not getSecurityManager().checkPermission(ModifyAliases, obj):
-                    if not getSecurityManager().checkPermission(ManagePortal, obj):
-                        obj = None
-                    break
             if obj is None:
                 err = _(u"You don't have the permission to set an alias from the location you provided.")  # noqa
             else:
