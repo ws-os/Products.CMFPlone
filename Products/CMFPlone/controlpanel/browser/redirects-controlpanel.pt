@@ -22,14 +22,11 @@
             <tr tal:repeat="error view/errors"
                 style="vertical-align: top">
               <td nowrap="nowrap">
-                <tal:block i18n:translate="label_bulk_upload_line">Line</tal:block>
-                <span tal:replace="error/line_number" />
+                <tal:block i18n:translate="label_bulk_upload_line">Line</tal:block> ${error/line_number}
                 <tal:block i18n:translate="label_bulk_upload_line_suffix">:</tal:block>
               </td>
-              <td>
-                <code tal:content="error/line" />
-              </td>
-              <td tal:content="error/message" />
+              <td>${error/line}</td>
+              <td>${error/message}</td>
             </tr>
           </table>
         </dd>
@@ -101,12 +98,12 @@
 
           <tal:redirects repeat="redirect view/redirects">
             <div>
-              <input type="checkbox"
-                     class="noborder"
-                     name="redirects:tuple"
-                     tal:attributes="value redirect/redirect" />
-
-              <span tal:replace="redirect/path" /> &rarr; <span tal:replace="redirect/redirect-to" />
+              <input
+                  type="checkbox"
+                  class="noborder"
+                  name="redirects:tuple"
+                  value="${redirect/redirect}" />
+              ${redirect/path} &rarr; ${redirect/redirect-to}
             </div>
           </tal:redirects>
 
