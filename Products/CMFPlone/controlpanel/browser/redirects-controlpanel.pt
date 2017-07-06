@@ -47,74 +47,6 @@
         Manage aliases
       </h1>
 
-      <p i18n:translate="description_manage_aliases">
-        Using this form, you can select for which types you want to manage
-        aliases and manage all existing aliases.
-      </p>
-
-
-      <form
-          action="${view/view_url}"
-          method="post">
-        <tal:block tal:repeat="widget python: view.form.widgets.values()">
-
-            <div
-                class="field"
-                tal:define="description widget/field/description;
-                            error widget/error"
-                tal:attributes="class python:'field'+(error and ' error' or '')">
-
-                <label
-                    i18n:translate=""
-                    tal:attributes="for widget/name"
-                    tal:content="widget/label">
-                  label
-                </label>
-
-                <span
-                    class="fieldRequired"
-                    title="Required"
-                    i18n:attributes="title title_required;"
-                    i18n:translate="label_required"
-                    tal:condition="widget/required">
-                  (Required)
-                </span>
-
-                <div
-                    class="formHelp"
-                    i18n:translate=""
-                    tal:content="description"
-                    tal:condition="description">
-                  field description
-                </div>
-
-                <div
-                    tal:condition="error"
-                    tal:content="structure error">
-                  The Error
-                </div>
-
-                <div
-                    class="widget"
-                    tal:content="structure widget">
-                  <input type="text" />
-                </div>
-            </div>
-
-        </tal:block>
-
-        <div
-            class="formControls"
-            i18n:domain="plone">
-          <input
-              class="context"
-              type="submit"
-              value="Save"
-              name="form.button.Save"
-              i18n:attributes="value label_save;" />
-        </div>
-      </form>
-
       <form
           action="${view/view_url}"
           method="post">
@@ -194,12 +126,14 @@
 
           <tal:redirects repeat="redirect view/redirects">
             <div>
+              <label>
               <input
                   type="checkbox"
                   class="noborder"
                   name="redirects:tuple"
                   value="${redirect/redirect}" />
               ${redirect/path} &rarr; ${redirect/redirect-to}
+              </label>
             </div>
           </tal:redirects>
 

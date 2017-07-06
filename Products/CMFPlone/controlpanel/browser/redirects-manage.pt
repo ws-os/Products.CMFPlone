@@ -75,12 +75,14 @@
 
           <tal:redirects repeat="redirect view/redirects">
             <div>
+              <label>
               <input type="checkbox"
                      class="noborder"
                      name="redirects:tuple"
                      tal:attributes="value redirect/redirect" />
 
-              <span tal:replace="redirect/path" />
+                <span tal:replace="redirect/path" />
+              </label>
             </div>
           </tal:redirects>
 

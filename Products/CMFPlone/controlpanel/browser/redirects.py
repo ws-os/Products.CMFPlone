@@ -1,31 +1,18 @@
-import csv
-from cStringIO import StringIO
-
-from zope.interface import implementer
-from zope.interface import Interface
-from zope.component import adapts
-from zope.component import getUtility
-from zope.schema import Choice, Tuple
-
+# -*- coding: utf-8 -*-
 from AccessControl import getSecurityManager
-#from Products.RedirectionTool.permissions import ModifyAliases
+from cStringIO import StringIO
+from plone.app.redirector.interfaces import IRedirectionStorage
+from plone.memoize.instance import memoize
+from Products.CMFCore.interfaces import ISiteRoot
 from Products.CMFCore.permissions import ManagePortal
-
 from Products.Five.browser import BrowserView
 from Products.Five.browser.pagetemplatefile import ViewPageTemplateFile
-
 from Products.statusmessages.interfaces import IStatusMessage
-from Products.CMFCore.interfaces import ISiteRoot
-from Products.CMFCore.utils import getToolByName
-from Products.CMFPlone.interfaces import IPloneSiteRoot
-from plone.app.redirector.interfaces import IRedirectionStorage
-
-
-from z3c.form import form, field
-
-from plone.memoize.instance import memoize
-
+from zope.component import getUtility
 from zope.i18nmessageid import MessageFactory
+
+import csv
+
 _ = MessageFactory('plone')
 
 
@@ -131,42 +118,8 @@ class RedirectsView(BrowserView):
         return self.context.absolute_url() + '/@@manage-aliases'
 
 
-class IAliasesSchema(Interface):
-
-    managed_types = Tuple(title=_(u"Managed types"),
-                          description=_(u"Select the types for which the "
-                                        "aliases can be managed"),
-                          required=True,
-                          missing_value=tuple(),
-                          value_type=Choice(
-                              vocabulary="plone.app.vocabularies.ReallyUserFriendlyTypes"))
-
-
-@implementer(IAliasesSchema)
-class RedirectsControlPanelAdapter(object):
-
-    adapts(IPloneSiteRoot)
-
-    def __init__(self, context):
-        self.context = context
-        self.rt = getUtility(IRedirectionStorage)
-
-    def get_managed_types(self):
-        return self.rt.getRedirectionAllowedForTypes()
-
-    def set_managed_types(self, value):
-        if type(value) in (str, unicode):
-            value = [value]
-        self.rt.setRedirectionAllowedForTypes(value)
-
-    managed_types = property(get_managed_types, set_managed_types)
-
-
-class RedirectsControlPanelForm(form.EditForm):
-    fields = field.Fields(IAliasesSchema)
-
-
 class RedirectsControlPanel(BrowserView):
+
     template = ViewPageTemplateFile('redirects-controlpanel.pt')
 
     def __init__(self, context, request):
@@ -217,16 +170,11 @@ class RedirectsControlPanel(BrowserView):
                 status.addStatusMessage(_(u"Aliases removed."), type='info')
             else:
                 status.addStatusMessage(_(u"Alias removed."), type='info')
-        elif 'form.button.Save' in form:
-            dst = IAliasesSchema(self.context)
-            dst.managed_types = self.request.form['form.widgets.managed_types']
         elif 'form.button.Add' in form:
             self.add(form['redirection'], form['target_path'], portal, storage, status)
         elif 'form.button.Upload' in form:
             self.upload(form['file'], portal, storage, status)
 
-        self.form = RedirectsControlPanelForm(self.context, self.request)
-        self.form.update()
         return self.template()
 
     def add(self, redirection, target, portal, storage, status):
@@ -234,7 +182,7 @@ class RedirectsControlPanel(BrowserView):
 
         abs_redirection, err = absolutize_path(redirection, is_alias=True)
         abs_target, target_err = absolutize_path(target, is_alias=False)
-        
+
         if err and target_err:
             err = "{0} {1}".format(err, target_err)
         elif target_err:
