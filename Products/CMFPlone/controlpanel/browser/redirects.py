@@ -263,4 +263,4 @@ class RedirectsControlPanel(BrowserView):
 
     @memoize
     def view_url(self):
-        return self.context.absolute_url() + '/@@aliases-controlpanel'
+        return self.context.absolute_url() + '/@@redirection-controlpanel'
