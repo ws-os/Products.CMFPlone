@@ -9,6 +9,7 @@ from zope.schema import Choice, Tuple
 
 from AccessControl import getSecurityManager
 #from Products.RedirectionTool.permissions import ModifyAliases
+from Products.CMFCore.permissions import ManagePortal
 
 from Products.Five.browser import BrowserView
 from Products.Five.browser.pagetemplatefile import ViewPageTemplateFile
@@ -31,7 +32,7 @@ _ = MessageFactory('plone')
 def absolutize_path(path, context=None, is_alias=True):
     """Check whether `path` is a well-formed path from the portal root, and
        make it Zope-root-relative. If `is_alias` (as opposed to "is_target"),
-       also make sure the user has the requisite ModifyAliases permissions to
+       also make sure the user has the requiered ModifyAliases permissions to
        make an alias from that path. Return a 2-tuple: (absolute redirection path,
        an error message iff something goes wrong and otherwise '').
 
@@ -65,7 +66,8 @@ def absolutize_path(path, context=None, is_alias=True):
                 if obj is None:
                     source = source[:-1]
                 else:
-                    if not getSecurityManager().checkPermission(ModifyAliases, obj):
+                    # if not getSecurityManager().checkPermission(ModifyAliases, obj):
+                    if not getSecurityManager().checkPermission(ManagePortal, obj):
                         obj = None
                     break
             if obj is None:
