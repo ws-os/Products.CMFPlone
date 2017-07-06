@@ -173,6 +173,13 @@ class RedirectsControlPanel(BrowserView):
         # list of tuples: (line_number, absolute_redirection_path, err_msg, target)
 
     def redirects(self):
+        """ Get existing redirects from the redirection storage.
+            Return dict with the strings redirect, path and redirect-to.
+            Strip the id of the instance from path and redirect-to if
+            it is present. (Seems to be always true)
+            If id of instance is not present in path the var 'path' and
+            'redirect' are equal.
+        """
         storage = getUtility(IRedirectionStorage)
         portal = getUtility(ISiteRoot)
         portal_path = "/".join(portal.getPhysicalPath())
