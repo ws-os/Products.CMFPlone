@@ -1,6 +1,7 @@
 # -*- coding: utf-8 -*-
 from AccessControl import getSecurityManager
 from cStringIO import StringIO
+from plone import api
 from plone.app.redirector.interfaces import IRedirectionStorage
 from plone.memoize.instance import memoize
 from Products.CMFCore.interfaces import ISiteRoot
@@ -16,17 +17,14 @@ import csv
 _ = MessageFactory('plone')
 
 
-def absolutize_path(path, context=None, is_alias=True):
-    """Check whether `path` is a well-formed path from the portal root, and
-       make it Zope-root-relative. If `is_alias` (as opposed to "is_target"),
-       also make sure the user has the requiered ModifyAliases permissions to
-       make an alias from that path. Return a 2-tuple: (absolute redirection path,
-       an error message iff something goes wrong and otherwise '').
-
-    Assume relative paths are relative to `context`; reject relative paths if
-    `context` is None.
-
+def absolutize_path(path, context=None, is_source=True):
+    """Check whether object exist to the provided `path`.
+       Assume relative paths are relative to `context`;
+       reject relative paths if `context` is None.
+       Return a 2-tuple: (absolute redirection path,
+       an error message if something goes wrong and otherwise '').
     """
+
     portal = getUtility(ISiteRoot)
     err = None
     if path is None or path == '':
@@ -35,29 +33,26 @@ def absolutize_path(path, context=None, is_alias=True):
     else:
         if path.startswith('/'):
             context_path = "/".join(portal.getPhysicalPath())
-            path = "%s%s" % (context_path, path)
+            path = "{0}{1}".format(context_path, path)
         else:
             if context is None:
                 err = (is_alias and _(u"Alias path must start with a slash.")
                        or _(u"Target path must start with a slash."))
             else:
+                # What case should this be?
                 context_path = "/".join(context.getPhysicalPath()[:-1])
-                path = "%s/%s" % (context_path, path)
-        # Check whether obj exists at source path
-        if not err and is_alias:
-            source = path.split('/')
-            while len(source):
-                obj = portal.unrestrictedTraverse(source, None)
-                if obj is None:
-                    source = source[:-1]
-            if obj is None:
-                err = _(u"You don't have the permission to set an alias from the location you provided.")  # noqa
-            else:
-                pass
-                # XXX check if there is an existing alias
-                # XXX check whether there is an object
+                path = "{0}/{1}".format(context_path, path)
+        if not err and is_source:
+            # Check whether obj exists at source path
+            result = api.content.find(path={"query": path})
+            if len(result) == 0:
+                err = _(u"The provided source path does not point to an object.")
+        if not err and not is_source:
+            # Check whether obj exists at target path
+            result = api.content.find(path={"query": path})
+            if len(result) != 0:
+                err = _(u"The provided target path does already exist.")
     return path, err
-
 
 class RedirectsView(BrowserView):
     template = ViewPageTemplateFile('redirects-manage.pt')
@@ -83,13 +78,11 @@ class RedirectsView(BrowserView):
         errors = {}
 
         if 'form.button.Add' in form:
-            redirection, err = absolutize_path(form.get('redirection'), is_alias=True)
+            redirection, err = absolutize_path(form.get('redirection'), is_source=False)
             if err:
                 errors['redirection'] = err
                 status.addStatusMessage(err, type='error')
             else:
-                # XXX check if there is an existing alias
-                # XXX check whether there is an object
                 del form['redirection']
                 storage.add(redirection, "/".join(self.context.getPhysicalPath()))
                 status.addStatusMessage(_(u"Alias added."), type='info')
@@ -171,8 +164,8 @@ class RedirectsControlPanel(BrowserView):
     def add(self, redirection, target, portal, storage, status):
         """Add the redirections from the form. If anything goes wrong, do nothing."""
 
-        abs_redirection, err = absolutize_path(redirection, is_alias=True)
-        abs_target, target_err = absolutize_path(target, is_alias=False)
+        abs_redirection, err = absolutize_path(redirection, is_source=True)
+        abs_target, target_err = absolutize_path(target, is_source=False)
 
         if err and target_err:
             err = "{0} {1}".format(err, target_err)
