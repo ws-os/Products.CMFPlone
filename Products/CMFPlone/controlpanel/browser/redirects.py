@@ -3,9 +3,11 @@ from AccessControl import getSecurityManager
 from cStringIO import StringIO
 from plone import api
 from plone.app.redirector.interfaces import IRedirectionStorage
-from plone.memoize.instance import memoize
+from plone.batching.browser import PloneBatchView
+from plone.memoize.view import memoize
 from Products.CMFCore.interfaces import ISiteRoot
 from Products.CMFCore.permissions import ManagePortal
+from Products.CMFPlone.PloneBatch import Batch
 from Products.Five.browser import BrowserView
 from Products.Five.browser.pagetemplatefile import ViewPageTemplateFile
 from Products.statusmessages.interfaces import IStatusMessage
@@ -103,6 +105,48 @@ class RedirectsView(BrowserView):
         return self.context.absolute_url() + '/@@manage-aliases'
 
 
+class RedirectionSet(object):
+    def __init__(self):
+        self.storage = getUtility(IRedirectionStorage)
+
+        portal = getUtility(ISiteRoot)
+        self.portal_path = "/".join(portal.getPhysicalPath())
+        self.portal_path_len = len(self.portal_path)
+
+        # noinspection PyProtectedMember
+        self.data = list(self.storage._paths.keys())  # maybe be costly
+
+    def __len__(self):
+        return len(self.data)
+
+    def __iter__(self):
+        return iter(self.storage)
+
+    def __getitem__(self, item):
+        redirect = self.data[item]
+        if redirect.startswith(self.portal_path):
+            path = redirect[self.portal_path_len:]
+        else:
+            path = redirect
+        redirect_to = self.storage.get(redirect)
+        if redirect_to.startswith(self.portal_path):
+            redirect_to = redirect_to[self.portal_path_len:]
+        return {
+            'redirect': redirect,
+            'path': path,
+            'redirect-to': redirect_to,
+        }
+
+
+class RedirectsBatchView(PloneBatchView):
+    def make_link(self, pagenumber=None, omit_params=None):
+        if omit_params is None:
+            omit_params = ['ajax_load']
+        url = super(RedirectsBatchView, self).make_link(pagenumber,
+                                                        omit_params)
+        return url + u'#manage-existing-aliases'
+
+
 class RedirectsControlPanel(BrowserView):
 
     template = ViewPageTemplateFile('redirects-controlpanel.pt')
@@ -112,6 +156,10 @@ class RedirectsControlPanel(BrowserView):
         self.errors = []
         # list of tuples: (line_number, absolute_redirection_path, err_msg, target)
 
+    def batching(self):
+        return RedirectsBatchView(self.context, self.request)(self.redirects())
+
+    @memoize
     def redirects(self):
         """ Get existing redirects from the redirection storage.
             Return dict with the strings redirect, path and redirect-to.
@@ -120,23 +168,12 @@ class RedirectsControlPanel(BrowserView):
             If id of instance is not present in path the var 'path' and
             'redirect' are equal.
         """
-        storage = getUtility(IRedirectionStorage)
-        portal = getUtility(ISiteRoot)
-        portal_path = "/".join(portal.getPhysicalPath())
-        portal_path_len = len(portal_path)
-        for redirect in storage:
-            if redirect.startswith(portal_path):
-                path = redirect[portal_path_len:]
-            else:
-                path = redirect
-            redirectto = storage.get(redirect)
-            if redirectto.startswith(portal_path):
-                redirectto = redirectto[portal_path_len:]
-            yield {
-                'redirect': redirect,
-                'path': path,
-                'redirect-to': redirectto,
-            }
+        return Batch(
+            RedirectionSet(),
+            15,
+            int(self.request.form.get('b_start', '0')),
+            orphan=1
+        )
 
     def __call__(self):
         storage = getUtility(IRedirectionStorage)

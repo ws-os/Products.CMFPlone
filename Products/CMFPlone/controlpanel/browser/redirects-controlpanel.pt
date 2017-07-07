@@ -118,13 +118,15 @@
 
       <form
           action="${view/view_url}"
-          method="post">
-        <fieldset>
+          method="post"
+          id="manage-existing-aliases">
+        <fieldset
+          tal:define="batch view/redirects">
           <legend i18n:translate="legend_all_existing_aliases">
             All existing aliases for this site
           </legend>
 
-          <tal:redirects repeat="redirect view/redirects">
+          <tal:redirects repeat="redirect batch">
             <div>
               <label>
               <input
@@ -136,6 +138,10 @@
               </label>
             </div>
           </tal:redirects>
+
+          <div tal:condition="python:batch.numpages > 1"
+               tal:replace="structure view/batching">
+          </div>
 
           <div class="formControls">
             <input class="context"
