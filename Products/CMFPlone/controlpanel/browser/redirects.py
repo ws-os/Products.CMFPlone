@@ -119,9 +119,6 @@ class RedirectionSet(object):
     def __len__(self):
         return len(self.data)
 
-    def __iter__(self):
-        return iter(self.storage)
-
     def __getitem__(self, item):
         redirect = self.data[item]
         if redirect.startswith(self.portal_path):

@@ -1,4 +1,6 @@
 # -*- coding: utf-8 -*-
+from Products.CMFPlone.PloneBatch import Batch
+from Products.CMFPlone.controlpanel.browser.redirects import RedirectionSet
 from plone.app.testing import SITE_OWNER_NAME, SITE_OWNER_PASSWORD
 from plone.app.redirector.interfaces import IRedirectionStorage
 from plone.testing.z2 import Browser
@@ -74,3 +76,40 @@ class RedirectionControlPanelFunctionalTest(unittest.TestCase):
             storage.has_path(storage_path),
             u'Redirection storage should have path "{0}"'.format(storage_path)
         )
+
+    def test_redirection_controlpanel_set(self):
+        storage = getUtility(IRedirectionStorage)
+        portal_path = self.layer['portal'].absolute_url_path()
+        for i in range(1000):
+            storage.add('{0:s}/foo/{1:s}'.format(portal_path, str(i)),
+                        '{0:s}/bar/{1:s}'.format(portal_path, str(i)))
+        redirects = RedirectionSet()
+        self.assertEqual(len(redirects), 1000)
+        self.assertDictEqual(redirects[0], {
+            'redirect': '{0:s}/foo/0'.format(portal_path),
+            'path': '/foo/0', 'redirect-to': '/bar/0'
+        })
+        self.assertDictEqual(redirects[999], {
+            'redirect': '{0:s}/foo/999'.format(portal_path),
+            'path': '/foo/999', 'redirect-to': '/bar/999'
+        })
+        self.assertEqual(len(list(iter(redirects))), 1000)
+        self.assertDictEqual(list(iter(redirects))[0], {
+            'redirect': '{0:s}/foo/0'.format(portal_path),
+            'path': '/foo/0', 'redirect-to': '/bar/0'
+        })
+
+    def test_redirection_controlpanel_batching(self):
+        storage = getUtility(IRedirectionStorage)
+        portal_path = self.layer['portal'].absolute_url_path()
+        for i in range(1000):
+            storage.add('{0:s}/foo/{1:s}'.format(portal_path, str(i)),
+                        '{0:s}/bar/{1:s}'.format(portal_path, str(i)))
+        view = getMultiAdapter((self.layer['portal'], self.layer['request']),
+                               name='redirection-controlpanel')
+        # Test that view/redirects returns batch
+        self.assertIsInstance(view.redirects(), Batch)
+
+        # Test that view/batching returns batching with anchor in urls
+        batching = view.batching()
+        self.assertIn('?b_start:int=990#manage-existing-aliases', batching)
