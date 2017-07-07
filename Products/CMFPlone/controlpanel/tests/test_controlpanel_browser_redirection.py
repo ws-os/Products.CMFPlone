@@ -1,6 +1,6 @@
 # -*- coding: utf-8 -*-
 from plone.app.testing import SITE_OWNER_NAME, SITE_OWNER_PASSWORD
-from plone.registry.interfaces import IRegistry
+from plone.app.redirector.interfaces import IRedirectionStorage
 from plone.testing.z2 import Browser
 
 from zope.component import getMultiAdapter
@@ -54,3 +54,23 @@ class RedirectionControlPanelFunctionalTest(unittest.TestCase):
         view = getMultiAdapter((self.portal, self.portal.REQUEST),
                                name="redirection-controlpanel")
         self.assertTrue(view())
+
+    def test_redirection_controlpanel_add_redirect(self):
+
+        redirection_path = '/Member1'
+        target_path = '/Member'
+        storage_path = '/plone/Member1'
+
+        self.browser.open(
+            "%s/@@redirection-controlpanel" % self.portal_url)
+        self.browser.getControl(
+            name='redirection').value = redirection_path
+        self.browser.getControl(
+            name='target_path').value = target_path
+        self.browser.getControl(name='form.button.Add').click()
+
+        storage = getUtility(IRedirectionStorage)
+        self.assertTrue(
+            storage.has_path(storage_path),
+            u'Redirection storage should have path "{0}"'.format(storage_path)
+        )
