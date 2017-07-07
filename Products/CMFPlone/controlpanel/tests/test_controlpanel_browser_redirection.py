@@ -58,10 +58,10 @@ class RedirectionControlPanelFunctionalTest(unittest.TestCase):
         self.assertTrue(view())
 
     def test_redirection_controlpanel_add_redirect(self):
-
-        redirection_path = '/Member1'
-        target_path = '/Member'
-        storage_path = '/plone/Member1'
+        storage = getUtility(IRedirectionStorage)
+        redirection_path = '/alias-folder'
+        target_path = '/test-folder'
+        storage_path = '/plone/alias-folder'
 
         self.browser.open(
             "%s/@@redirection-controlpanel" % self.portal_url)
