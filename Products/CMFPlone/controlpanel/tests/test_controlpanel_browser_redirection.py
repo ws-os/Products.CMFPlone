@@ -12,7 +12,7 @@ from Products.CMFPlone.testing import \
     PRODUCTS_CMFPLONE_FUNCTIONAL_TESTING
 
 import unittest
-
+import transaction
 
 class RedirectionControlPanelFunctionalTest(unittest.TestCase):
     """Test that changes in the mail control panel are actually
@@ -113,3 +113,29 @@ class RedirectionControlPanelFunctionalTest(unittest.TestCase):
         # Test that view/batching returns batching with anchor in urls
         batching = view.batching()
         self.assertIn('?b_start:int=990#manage-existing-aliases', batching)
+
+    def test_redirection_controlpanel_redirect_alias_exists(self):
+        path_alias = '/alias'
+        path_target = '/test-folder'
+        storage_alias = '/plone{0}'.format(path_alias)
+        storage_target = '/plone{0}'.format(path_target)
+        storage = getUtility(IRedirectionStorage)
+        storage.add(storage_alias, storage_target)
+        transaction.commit()
+
+        self.browser.open(
+            "%s/@@redirection-controlpanel" % self.portal_url)
+        self.browser.getControl(
+            name='redirection').value = path_alias
+        self.browser.getControl(
+            name='target_path').value = path_target
+        self.browser.getControl(name='form.button.Add').click()
+
+        self.assertTrue(
+            storage.get(storage_alias) == storage_target,
+            '{0} not target of alias!'.format(storage_target)
+        )
+        self.assertTrue(
+            'The provided alias already exists!' in self.browser.contents,
+            u'Message "alias already exists" not in page!'
+        )
