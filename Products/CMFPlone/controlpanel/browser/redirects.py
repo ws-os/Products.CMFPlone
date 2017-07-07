@@ -106,15 +106,20 @@ class RedirectsView(BrowserView):
 
 
 class RedirectionSet(object):
-    def __init__(self):
+    def __init__(self, query=''):
         self.storage = getUtility(IRedirectionStorage)
 
         portal = getUtility(ISiteRoot)
-        self.portal_path = "/".join(portal.getPhysicalPath())
+        self.portal_path = '/'.join(portal.getPhysicalPath())
         self.portal_path_len = len(self.portal_path)
 
         # noinspection PyProtectedMember
-        self.data = list(self.storage._paths.keys())  # maybe be costly
+        if query:
+            min_k = u'{0:s}/{1:s}'.format(self.portal_path, query.strip('/'))
+            max_k = min_k[:-1] + chr(ord(min_k[-1]) + 1)
+            self.data = list(self.storage._paths.keys(min=min_k, max=max_k))
+        else:
+            self.data = list(self.storage._paths.keys())  # maybe be costly
 
     def __len__(self):
         return len(self.data)
@@ -141,7 +146,7 @@ class RedirectsBatchView(PloneBatchView):
             omit_params = ['ajax_load']
         url = super(RedirectsBatchView, self).make_link(pagenumber,
                                                         omit_params)
-        return url + u'#manage-existing-aliases'
+        return u'{0:s}#manage-existing-aliases'.format(url)
 
 
 class RedirectsControlPanel(BrowserView):
@@ -166,7 +171,7 @@ class RedirectsControlPanel(BrowserView):
             'redirect' are equal.
         """
         return Batch(
-            RedirectionSet(),
+            RedirectionSet(self.request.form.get('q', '')),
             15,
             int(self.request.form.get('b_start', '0')),
             orphan=1

@@ -117,7 +117,7 @@
       </form>
 
       <form
-          action="${view/view_url}"
+          action="${view/view_url}#manage-existing-aliases"
           method="post"
           id="manage-existing-aliases">
         <fieldset
@@ -125,6 +125,22 @@
           <legend i18n:translate="legend_all_existing_aliases">
             All existing aliases for this site
           </legend>
+
+          <label for="filter-existing-aliases-q" i18n:translate="">Filter by prefix</label>
+          <input
+              type="text"
+              name="q"
+              value=""
+              id="filter-existing-aliases-q"
+               tal:attributes="value python:request.form.get('q', '/')"/>
+          <div class="formControls">
+            <input
+                class="context"
+                type="submit"
+                value="Filter"
+                name="form.button.filter"
+                 i18n:attributes="value" />
+          </div>
 
           <tal:redirects repeat="redirect batch">
             <div>

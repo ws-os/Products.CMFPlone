@@ -11,6 +11,7 @@ from zope.component import getUtility
 from Products.CMFPlone.testing import \
     PRODUCTS_CMFPLONE_FUNCTIONAL_TESTING
 
+import math
 import unittest
 import transaction
 
@@ -138,3 +139,49 @@ class RedirectionControlPanelFunctionalTest(unittest.TestCase):
             'The provided alias already exists!' in self.browser.contents,
             u'Message "alias already exists" not in page!'
         )
+
+    def test_redirection_controlpanel_filtering(self):
+        storage = getUtility(IRedirectionStorage)
+        portal_path = self.layer['portal'].absolute_url_path()
+        for i in range(1000):
+            storage.add('{0:s}/foo1/{1:s}'.format(portal_path, str(i)),
+                        '{0:s}/bar/{1:s}'.format(portal_path, str(i)))
+        for i in range(1000):
+            storage.add('{0:s}/foo2/{1:s}'.format(portal_path, str(i)),
+                        '{0:s}/bar/{1:s}'.format(portal_path, str(i)))
+
+        redirects = RedirectionSet()
+        self.assertEqual(len(redirects), 2000)
+        redirects = RedirectionSet(query='/foo')
+        self.assertEqual(len(redirects), 2000)
+        redirects = RedirectionSet(query='/foo1')
+        self.assertEqual(len(redirects), 1000)
+        redirects = RedirectionSet(query='/foo2')
+        self.assertEqual(len(redirects), 1000)
+
+        request = self.layer['request'].clone()
+        request.form['q'] = '/foo'
+        view = getMultiAdapter((self.layer['portal'], request),
+                               name='redirection-controlpanel')
+        self.assertEqual(view.redirects().numpages, math.ceil(2000 / 15.))
+
+        request = self.layer['request'].clone()
+        request.form['q'] = '/foo1'
+        view = getMultiAdapter((self.layer['portal'], request),
+                               name='redirection-controlpanel')
+        self.assertEqual(view.redirects().numpages, math.ceil(1000 / 15.))
+
+        request = self.layer['request'].clone()
+        request.form['q'] = '/foo2'
+        view = getMultiAdapter((self.layer['portal'], request),
+                               name='redirection-controlpanel')
+        self.assertEqual(view.redirects().numpages, math.ceil(1000 / 15.))
+
+        request = self.layer['request'].clone()
+        view = getMultiAdapter((self.layer['portal'], request),
+                               name='redirection-controlpanel')
+        self.assertEqual(view.redirects().numpages, math.ceil(2000 / 15.))
+
+        # Filtering without new request does not have effect because memoize
+        request.form['q'] = '/foo2'
+        self.assertEqual(view.redirects().numpages, math.ceil(2000 / 15.))
