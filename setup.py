@@ -109,6 +109,7 @@ setup(
         'plone.indexer',
         'plone.intelligenttext',
         'plone.locking',
+        'plone.login',
         'plone.memoize',
         'plone.outputfilters',
         'plone.portlet.collection',

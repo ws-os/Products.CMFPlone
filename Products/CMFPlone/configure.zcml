@@ -32,6 +32,7 @@
   <include package="plone.app.vocabularies" />
   <include package="plone.app.workflow" />
   <include package="plone.batching" />
+  <include package="plone.login" />
   <include package="plone.memoize" />
   <include package="plone.outputfilters" />
   <include package="plone.session" />
