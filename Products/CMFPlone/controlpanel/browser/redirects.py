@@ -49,12 +49,12 @@ def absolutize_path(path, context=None, is_alias=True):
             # Check whether obj exists at source path
             result = api.content.find(path={"query": path})
             if len(result) == 0:
-                err = _(u"The provided target object does exist.")
+                err = _(u"The provided target object does not exist.")
         if not err and is_alias:
-            # Check whether obj exists at target path
-            result = api.content.find(path={"query": path})
-            if len(result) != 0:
-                err = _(u"The provided already does already exist.")
+            # Check whether already exists in storage
+            if storage.get(path):
+                err = _(u"The provided alias already exists!")
+
     return path, err
 
 class RedirectsView(BrowserView):
@@ -198,9 +198,12 @@ class RedirectsControlPanel(BrowserView):
 
     def add(self, redirection, target, portal, storage, status):
         """Add the redirections from the form. If anything goes wrong, do nothing."""
+        abs_target = ''
+        target_err = ''
 
         abs_redirection, err = absolutize_path(redirection, is_alias=True)
-        abs_target, target_err = absolutize_path(target, is_alias=False)
+        if not err:
+            abs_target, target_err = absolutize_path(target, is_alias=False)
 
         if err and target_err:
             err = "{0} {1}".format(err, target_err)
@@ -212,7 +215,7 @@ class RedirectsControlPanel(BrowserView):
                         u"an endless cycle of redirects.")
                 # TODO: detect indirect recursion
 
-        if not err:
+        if err:
             status.addStatusMessage(_(err), type='error')
         else:
             storage.add(abs_redirection, abs_target)
