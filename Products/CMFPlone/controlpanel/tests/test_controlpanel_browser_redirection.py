@@ -185,3 +185,20 @@ class RedirectionControlPanelFunctionalTest(unittest.TestCase):
         # Filtering without new request does not have effect because memoize
         request.form['q'] = '/foo2'
         self.assertEqual(view.redirects().numpages, math.ceil(2000 / 15.))
+
+    def test_redirection_controlpanel_redirect_no_target(self):
+        path_alias = '/alias'
+        path_target = '/not-existing'
+
+        self.browser.open(
+            "%s/@@redirection-controlpanel" % self.portal_url)
+        self.browser.getControl(
+            name='redirection').value = path_alias
+        self.browser.getControl(
+            name='target_path').value = path_target
+        self.browser.getControl(name='form.button.Add').click()
+
+        self.assertTrue(
+            'The provided target object does not exist.' in self.browser.contents,
+            u'Message "target does not exist" not in page!'
+        )
