@@ -34,7 +34,7 @@ First we try to log in with bad credentials:
     >>> "Login failed" in browser.contents
     True
     >>> browser.url
-    'http://nohost/plone/login_form'
+    'http://nohost/plone/login'
 
 And then we try again with the right credentials:
 
@@ -48,10 +48,12 @@ And then we try again with the right credentials:
     >>> "You are now logged in" in browser.contents
     True
     >>> browser.url
-    'http://nohost/plone/login_form'
+    'http://nohost/plone'
     >>> browser.getLink('Log out').click()
     >>> browser.url
-    'http://nohost/plone/logged_out'
+    'http://nohost/plone'
+    >>> "You have been logged out." in browser.contents
+    True
 
 Using the Login Portlet
 -----------------------
@@ -80,7 +82,7 @@ First we try to log in with bad credentials:
     >>> "Login failed" in browser.contents
     True
     >>> browser.url
-    'http://nohost/plone/login_form'
+    'http://nohost/plone/login'
 
 And then we try again with the right credentials:
 
@@ -117,7 +119,7 @@ the site:
     >>> browser.getLink('Home').click()
     >>> app.acl_users.userFolderAddUser('rootuser', 'secret', [], [])
     >>> transaction.commit()
-    >>> browser.open('http://nohost/plone/login_form')
+    >>> browser.open('http://nohost/plone/login')
     >>> browser.getControl('Login Name').value = 'rootuser'
     >>> browser.getControl('Password').value = 'secret'
     >>> browser.getControl('Log in').click()
@@ -157,7 +159,7 @@ Test must_change_password
 Start with a fresh testbrowser
 
     >>> browser = Browser(app)
-    >>> browser.open('http://nohost/plone/')
+    >>> browser.open('http://nohost/plone')
 
 Configure must_change_password (not enabled by default).
 
@@ -187,7 +189,7 @@ Try to login.
 The user should receive a message asking them to change their password.
 
     >>> browser.url
-    'http://nohost/plone/login_form'
+    'http://nohost/plone/login'
     >>> 'Please use the form below to change your password.' in browser.contents
     True
     >>> browser.getControl(name='password').value = 'Testing23'
@@ -215,4 +217,6 @@ Logout.  This would fail if the user lost their login session for example.
 
     >>> browser.getLink('Log out').click()
     >>> browser.url
-    'http://nohost/plone/logged_out'
+    'http://nohost/plone'
+    >>> "You have been logged out." in browser.contents
+    True
