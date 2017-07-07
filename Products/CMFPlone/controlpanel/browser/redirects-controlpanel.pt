@@ -55,7 +55,7 @@
             Add a new alias
           </legend>
 
-          <label for="redirection">Source Path</label>
+          <label for="redirection">Alias Path</label>
           <input
               type="text"
               name="redirection">
