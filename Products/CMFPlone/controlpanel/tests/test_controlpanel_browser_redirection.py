@@ -71,7 +71,6 @@ class RedirectionControlPanelFunctionalTest(unittest.TestCase):
             name='target_path').value = target_path
         self.browser.getControl(name='form.button.Add').click()
 
-        storage = getUtility(IRedirectionStorage)
         self.assertTrue(
             storage.has_path(storage_path),
             u'Redirection storage should have path "{0}"'.format(storage_path)
