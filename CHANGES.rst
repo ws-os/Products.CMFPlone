@@ -10,7 +10,7 @@ Changelog
 
 Breaking changes:
 
-- Replaced cssmin with PyScss to ensure Python 3 compatibility and maintainability. 
+- Replaced cssmin with PyScss to ensure Python 3 compatibility and maintainability.
   Removed dependency to cssmin, so could break dependency for third party addons that depend on it.
   Introduced PyScss as a drop in replacement that could also do more things.
   Discussion on that at https://github.com/plone/Products.CMFPlone/issues/1800
@@ -21,6 +21,12 @@ New features:
 - Added ``Show Toolbar`` permission.
   [agitator]
 
+- Add jqtree contextual menu to the file tree.
+  [b4oshany]
+
+- Add js-shortcuts package for keyboard shortcuts
+  [b4oshany]
+
 Bug fixes:
 
 - add :focus class on toolbar for keyboard users  (https://github.com/plone/Products.CMFPlone/issues/1620)
@@ -28,6 +34,9 @@ Bug fixes:
 
 - Fix empty DX add_forms if formlib is also installed thru addon dependencies
   [MrTango]
+
+- Update jqtree to 1.4.1
+  [b4oshany]
 
 
 5.1b4 (2017-07-03)
