@@ -5,17 +5,113 @@
 Changelog
 =========
 
-5.1b4 (unreleased)
-------------------
+5.1rc2 (unreleased)
+-------------------
 
 Breaking changes:
 
-- *add item here*
+- Fix default image scale sizes, to fit default theme better
+  [MrTango]  
+
+New features:
+
+- Update npm dependencies.
+  [thet]
+  
+Bug fixes:
+
+- Mockup update to fix a bug where folder contents' sorting was broken.
+  [thet]
+
+- Remove site path from path in show_inactive in catalog search
+  [Gagaro]
+
+- Don't raise Unauthorized on show_inactive check in catalog search
+  [tomgross]
+
+- Bump metadata.xml version.
+  [thet]
+
+- Extract CMFDefault specific config from `meta.zcml` into `meta-bbb.zcml`
+  to allow AT free and AT included sites.
+  [tomgross]
+
+- Add basic tests for all main zmi management screens.
+  [pbauer]
+
+5.1rc1 (2017-09-10)
+-------------------
+
+Breaking changes:
+
+- Replaced cssmin with PyScss to ensure Python 3 compatibility and maintainability.
+  Removed dependency to cssmin, so could break dependency for third party addons that depend on it.
+  Introduced PyScss as a drop in replacement that could also do more things.
+  Discussion on that at https://github.com/plone/Products.CMFPlone/issues/1800
+  [loechel]
+
+- Fix and migrate safe_html filter completly into Plone registry and sync settings with TinyMCE.
+  Also some unused options in controlpanel where removed, like stripped_combinations and class_blacklist.
+  [MrTango]
+
+New features:
+
+- Update ``plone-legacy-compiled.js`` and ``plone-legacy-compiled.css``.
+  [thet]
+
+- Update mockup to latest version.
+  [thet]
+
+- Added ``Show Toolbar`` permission.
+  [agitator]
+
+- Add RobotFramework screenshot tests for the Plone documentation.
+  [datakurre, polyester]
+
+- Add jqtree-contextmenu to the resource registry
+  [b4oshany]
+
+- Add js-shortcuts to the resource registry
+  [b4oshany]
+
+Bug fixes:
+
+- Recover missing dashboard (user actions)
+  https://github.com/plone/Products.CMFPlone/issues/1132
+  [fgrcon]
+
+- Remove the right padding on toolbar submenu entries.
+  That looked a bit weird.
+  [thet]
+
+- Fixed accidentally removing permissions when saving the ``portal_controlpanel`` settings in the ZMI.
+  Fixes `issue 1376 <https://github.com/plone/Products.CMFPlone/issues/1376>`_.  [maurits]
+
+- Do not open links on a new tab as this is against basic usability guidelines.
+  [hvelarde]
+
+- add :focus class on toolbar for keyboard users  (https://github.com/plone/Products.CMFPlone/issues/1620)
+  [polyester]
+
+- Fix empty DX add_forms if formlib is also installed thru addon dependencies
+  [MrTango]
+
+- Update TinyMCE links (tinymce-controlpanel) to https
+  [svx]
+
+- Fix ``utils.get_top_site_from_url`` to work with non-OFS contexts.
+  [thet]
+
+5.1b4 (2017-07-03)
+------------------
 
 New features:
 
 - Integrate ``mockup-patterns-structureupdater`` for updating title and description depending on the current context on the folder contents page.
   [thet]
+
+- Updated jqtree to 1.4.1 from 1.3.3
+  [b4oshany]
 
 - Update mockup to latest version.
   [thet]
@@ -38,6 +134,12 @@ New features:
 
 Bug fixes:
 
+- Use explicit @@footer view for footer portlet.
+  [agitator]
+
+- Translate image scales in patterns.
+  [Gagaro]
+
 - Gruntfile generation no longer fails on introspecting resourceDirectory
   configurations using a plone.browserlayer layer, by loading all layers
   configured for the site used during generation.
@@ -47,9 +149,6 @@ Bug fixes:
 - fixed css-classes for thumb scales ...
   https://github.com/plone/Products.CMFPlone/issues/2077
   [fgrcon]
-
-- Fix default image scale sizes, to fit default theme better
-  [MrTango]
 
 - Fix current value in group details edit form.
   [Gagaro]
