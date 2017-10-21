@@ -31,7 +31,7 @@ from Products.CMFPlone import PloneMessageFactory as _
 from Products.CMFPlone.interfaces.controlpanel import IImagingSchema
 from Products.CMFPlone.interfaces.siteroot import IPloneSiteRoot
 from types import ClassType
-from urlparse import urlparse
+from Products.CMFPlone._compat import urlparse
 from webdav.interfaces import IWriteLock
 from zope import schema
 from zope.component import getMultiAdapter
@@ -769,7 +769,7 @@ def get_top_site_from_url(context, request):
     """
     site = getSite()
     try:
-        url_path = urlparse(context.absolute_url()).path.split('/')
+        url_path = urlparse.urlparse(context.absolute_url()).path.split('/')
         for idx in range(len(url_path)):
             _path = '/'.join(url_path[:idx + 1]) or '/'
             site_path = request.physicalPathFromURL(_path)
