@@ -34,3 +34,9 @@ Bug Fixes:
 
 - Display real version of Zope, not of the empty meta-package Zope2.
   [pbauer]
+
+- Add zcml-condition plone-52 for conditional configuration.
+  [pbauer]
+
+- Use getSite in set_own_login_name to get the portals acl_users.
+  [pbauer]
